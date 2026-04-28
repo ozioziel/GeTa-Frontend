@@ -1,0 +1,12 @@
+.form-card{   
+   position: relative;
+    width: 400px; /*el tamanio de width sera de 400 px*/
+    padding: 32px; /*el tamanio de los elementos dentro tendran un margen de 32 px*/
+    border-radius: 20px; /*Sera redondeado y no cuadrado*/
+    background: rgba(31,31,31,0.72);
+    color: white;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    inset: 2;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}

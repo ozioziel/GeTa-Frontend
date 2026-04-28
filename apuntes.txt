@@ -1,0 +1,76 @@
+
+
+
+npm i -g @nestjs/cli
+nest new geta-gateway
+------------ .env --------------
+DB_HOST = localhost
+DB_PORT = 5433
+DB_USER = postgres
+DB_PASS = 31415
+DB_NAME = GeTa
+PORT = 3001
+
+-------------Decoradores
+
+Module ---> Module
+Service ---> Injectable
+Controller ---> Controller
+
+
+----------Coneccion con postgres
+
+npm install @nestjs/typeorm typeorm pg
+npm install @nestjs/config
+
+forRoot
+forRootAsync
+forFeature
+{
+  type: 'postgres',
+  host: ...,
+  port: ...,
+  username: ...,
+  password: ...,
+  database: ...,
+  autoLoadEntities: true,
+  synchronize: true,
+}
+
+
+InjectRepository
+
+
+
+-----Validaciones en DTO
+
+npm install class-validator class-transformer
+
+import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator'
+
+
+ValidationPipe
+
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true
+    })
+  )
+
+
+
+  ----------------------------------------------------PROXY PARA GATEWAY----------------------------
+
+  npm install @nestjs/axios axios
+
+  se crea un modulo para el microservicio que queramos que se conecte nuestro gateway, en ese caso
+  al ser un gateway no se usara controlador, 
+
+
+  ----------------------------------------------Encriptacion--------------------------------------------
+
+npm install bcrypt
+npm install -D @types/bcrypt

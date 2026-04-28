@@ -1,0 +1,132 @@
+*{
+    box-sizing: border-box; /* hace que lo que todo ocupe toda la pantalla*/
+    margin: 0; /* hace que lo que todo ocupe toda la pantalla*/
+    padding: 0; /* hace que lo que todo ocupe toda la pantalla*/
+}
+
+body {
+    font-family: Arial, sans-serif; /* Aniadimos fuente para todo lo que contenga visualmente*/
+}
+
+.login-page{
+    min-height: 100vh;  /*al ponerle min-height decimos que el 100% de la pantalla sera el login page*/
+    display: flex;  /*Es un layout que permite colocar elementos por donde querramos */
+    justify-content: center; /* El contenido de los hijos que esten dentro estaran centreados */
+    align-items: center;/* El contenido de los hijos que esten dentro estaran centreados */
+    background: #111;
+    position: relative; /* Los elementos absolutos se posicionan*/
+    overflow: hidden; /*evita que el video salga de la vista*/
+}
+.background-video{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.login-overlay{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    inset: 0;
+    object-fit: cover;
+    background: rgba(0,0,0, 0.85);
+}
+
+.login-header{
+    text-align: center;
+    margin-bottom: 24px;
+}
+.login-brand{
+    font-size: 14px;
+    margin-bottom: 12px;
+    color: #cfcfcf
+}
+
+.login-title{
+    font-size: 50px;
+    color: #ffcc00;
+    margin-bottom: 5px;
+    text-shadow: 0 0 5px rgba(255, 204, 0, 0.979);
+    
+}
+.login-subtitle{
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: #e5e5e5
+}
+
+.login-form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-group{
+    display: flex;
+    flex-direction: column;
+    gap: 0px
+}
+
+.form-group label{
+    font-size: 12px;
+    margin-bottom: 5px;
+    color: #f2f2f2;
+}
+.form-group input{
+    height: 50px;
+    padding: 14px;
+    margin-bottom: 20px;
+    border: 1px solid #444;
+    border-radius: 12px;
+    background: #2a2a2a;
+    color: white;
+}
+.form-group input::placeholder{
+    color: #999
+}
+.login-button{
+    height: 50px;
+    width: 100%;
+    border: none;
+    border-radius: 12px;
+    background: #ffcc00;
+    color: #2523b1;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    
+}
+
+.register-text{
+    text-align: center;
+    font-size: 15px
+}
+
+.register-text a{
+    color: #ffcc00;
+    font-weight: bold;
+}
+
+.register-text a:hover{
+    text-shadow: 0 0 8px rgba(255, 204, 0, 0.979);
+  
+}
+
+.button-arrow{
+    transition: transform 0.3s ease;
+}
+.login-button:hover{
+    box-shadow: 0 0 18px rgba(255,204,0,0.6);
+    transform: translateY(-1px);
+}
+
+.login-button:hover .button-arrow{
+    transform: translateX(6px);
+}
