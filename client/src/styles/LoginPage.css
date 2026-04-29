@@ -1,79 +1,73 @@
-*{
-    box-sizing: border-box; /* hace que lo que todo ocupe toda la pantalla*/
-    margin: 0; /* hace que lo que todo ocupe toda la pantalla*/
-    padding: 0; /* hace que lo que todo ocupe toda la pantalla*/
-}
-
-body {
-    font-family: Arial, sans-serif; /* Aniadimos fuente para todo lo que contenga visualmente*/
-}
-
-.login-page{
-    min-height: 100vh;  /*al ponerle min-height decimos que el 100% de la pantalla sera el login page*/
-    display: flex;  /*Es un layout que permite colocar elementos por donde querramos */
-    justify-content: center; /* El contenido de los hijos que esten dentro estaran centreados */
-    align-items: center;/* El contenido de los hijos que esten dentro estaran centreados */
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background: #111;
-    position: relative; /* Los elementos absolutos se posicionan*/
-    overflow: hidden; /*evita que el video salga de la vista*/
-}
-.background-video{
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-.login-overlay{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    inset: 0;
-    object-fit: cover;
-    background: rgba(0,0,0, 0.85);
+    position: relative;
+    overflow: hidden;
 }
 
-.login-header{
+.login-page .background-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.login-page .login-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    inset: 0;
+    object-fit: cover;
+    background: rgba(0, 0, 0, 0.85);
+}
+
+.login-page .login-header {
     text-align: center;
     margin-bottom: 24px;
 }
-.login-brand{
+
+.login-page .login-brand {
     font-size: 14px;
     margin-bottom: 12px;
-    color: #cfcfcf
+    color: #cfcfcf;
 }
 
-.login-title{
+.login-page .login-title {
     font-size: 50px;
     color: #ffcc00;
     margin-bottom: 5px;
     text-shadow: 0 0 5px rgba(255, 204, 0, 0.979);
-    
-}
-.login-subtitle{
-    font-size: 15px;
-    margin-bottom: 12px;
-    color: #e5e5e5
 }
 
-.login-form{
+.login-page .login-subtitle {
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: #e5e5e5;
+}
+
+.login-page .login-form {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.form-group{
+.login-page .form-group {
     display: flex;
     flex-direction: column;
-    gap: 0px
+    gap: 0px;
 }
 
-.form-group label{
+.login-page .form-group label {
     font-size: 12px;
     margin-bottom: 5px;
     color: #f2f2f2;
 }
-.form-group input{
+
+.login-page .form-group input {
     height: 50px;
     padding: 14px;
     margin-bottom: 20px;
@@ -82,10 +76,18 @@ body {
     background: #2a2a2a;
     color: white;
 }
-.form-group input::placeholder{
-    color: #999
+
+.login-page .form-group input::placeholder {
+    color: #999;
 }
-.login-button{
+
+.login-page .form-group input:focus {
+    outline: none;
+    border-color: #ffcc00;
+    box-shadow: 0 0 8px rgba(255, 204, 0, 0.45);
+}
+
+.login-page .login-button {
     height: 50px;
     width: 100%;
     border: none;
@@ -101,32 +103,47 @@ body {
     justify-content: center;
     align-items: center;
     gap: 10px;
-    
 }
 
-.register-text{
-    text-align: center;
-    font-size: 15px
-}
-
-.register-text a{
-    color: #ffcc00;
-    font-weight: bold;
-}
-
-.register-text a:hover{
-    text-shadow: 0 0 8px rgba(255, 204, 0, 0.979);
-  
-}
-
-.button-arrow{
-    transition: transform 0.3s ease;
-}
-.login-button:hover{
-    box-shadow: 0 0 18px rgba(255,204,0,0.6);
+.login-page .login-button:hover {
+    box-shadow: 0 0 18px rgba(255, 204, 0, 0.6);
     transform: translateY(-1px);
 }
 
-.login-button:hover .button-arrow{
+.login-page .button-arrow {
+    transition: transform 0.3s ease;
+}
+
+.login-page .login-button:hover .button-arrow {
     transform: translateX(6px);
+}
+
+.login-page .login-NoAccount {
+    margin-top: 8px;
+}
+
+.login-page .register-text {
+    text-align: center;
+    font-size: 15px;
+    color: #f2f2f2;
+}
+
+.login-page .register-text a {
+    color: #ffcc00;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.login-page .register-text a:hover {
+    text-shadow: 0 0 8px rgba(255, 204, 0, 0.979);
+}
+
+@media (max-width: 600px) {
+    .login-page .login-title {
+        font-size: 42px;
+    }
+
+    .login-page .login-subtitle {
+        font-size: 14px;
+    }
 }

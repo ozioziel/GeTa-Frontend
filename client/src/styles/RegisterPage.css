@@ -1,0 +1,301 @@
+.register-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000;
+    position: relative;
+    overflow: hidden;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+/* Luz amarilla suave del fondo */
+.register-page .register-light {
+    position: absolute;
+    width: 450px;
+    height: 450px;
+    border-radius: 50%;
+    background: rgba(255, 204, 0, 0.12);
+    filter: blur(90px);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: registerLightPulse 4s ease-in-out infinite;
+}
+
+@keyframes registerLightPulse {
+    0% {
+        opacity: 0.25;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    50% {
+        opacity: 0.65;
+        transform: translate(-50%, -50%) scale(1.15);
+    }
+
+    100% {
+        opacity: 0.25;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* Pantalla inicial tipo diálogo oscuro */
+.register-page .register-dialogue-screen {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.register-page .dialogue-content {
+    width: 90%;
+    max-width: 850px;
+    text-align: center;
+    padding: 30px;
+}
+
+.register-page .dialogue-text {
+    font-size: 34px;
+    line-height: 1.5;
+    color: #f2f2f2;
+    letter-spacing: 1px;
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
+    animation: registerDialogueFade 0.7s ease;
+}
+
+.register-page .dialogue-text span {
+    color: #ffcc00;
+    text-shadow: 0 0 12px rgba(255, 204, 0, 0.8);
+}
+
+.register-page .dialogue-hint {
+    margin-top: 40px;
+    font-size: 14px;
+    color: #777;
+    animation: registerHintBlink 1.5s ease-in-out infinite;
+}
+
+@keyframes registerDialogueFade {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes registerHintBlink {
+    0% {
+        opacity: 0.25;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.25;
+    }
+}
+
+/* Contenedor del formulario */
+.register-page .register-form-container {
+    position: relative;
+    z-index: 2;
+    animation: registerFormAppear 0.8s ease;
+}
+
+@keyframes registerFormAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Header del formulario */
+.register-page .register-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.register-page .register-brand {
+    font-size: 14px;
+    margin-bottom: 12px;
+    color: #cfcfcf;
+}
+
+.register-page .register-title {
+    font-size: 42px;
+    color: #ffcc00;
+    margin-bottom: 5px;
+    text-shadow: 0 0 5px rgba(255, 204, 0, 0.979);
+}
+
+.register-page .register-subtitle {
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: #e5e5e5;
+}
+
+/* Formulario */
+.register-page .register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.register-page .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+}
+
+.register-page .form-group label {
+    font-size: 12px;
+    margin-bottom: 5px;
+    color: #f2f2f2;
+}
+
+.register-page .form-group input {
+    height: 50px;
+    padding: 14px;
+    margin-bottom: 20px;
+    border: 1px solid #444;
+    border-radius: 12px;
+    background: #2a2a2a;
+    color: white;
+}
+
+.register-page .form-group input::placeholder {
+    color: #999;
+}
+
+.register-page .form-group input:focus {
+    outline: none;
+    border-color: #ffcc00;
+    box-shadow: 0 0 8px rgba(255, 204, 0, 0.45);
+}
+
+/* Botón principal */
+.register-page .register-button {
+    height: 50px;
+    width: 100%;
+    border: none;
+    border-radius: 12px;
+    background: #ffcc00;
+    color: #2523b1;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.register-page .register-button:hover {
+    box-shadow: 0 0 18px rgba(255, 204, 0, 0.6);
+    transform: translateY(-1px);
+}
+
+.register-page .register-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.register-page .button-arrow {
+    transition: transform 0.3s ease;
+}
+
+.register-page .register-button:hover .button-arrow {
+    transform: translateX(6px);
+}
+
+/* Error */
+.register-page .register-error {
+    color: #ff7b7b;
+    background: rgba(255, 0, 0, 0.12);
+    border: 1px solid rgba(255, 0, 0, 0.35);
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 13px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* Texto inferior */
+.register-page .login-text {
+    text-align: center;
+    font-size: 15px;
+    color: #f2f2f2;
+}
+
+.register-page .login-text a {
+    color: #ffcc00;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.register-page .login-text a:hover {
+    text-shadow: 0 0 8px rgba(255, 204, 0, 0.979);
+}
+
+/* Botón volver */
+.register-page .back-dialogue-button {
+    width: 100%;
+    margin-top: 12px;
+    background: transparent;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.register-page .back-dialogue-button:hover {
+    color: #ffcc00;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .register-page .dialogue-text {
+        font-size: 24px;
+    }
+
+    .register-page .dialogue-content {
+        padding: 20px;
+    }
+
+    .register-page .register-title {
+        font-size: 34px;
+    }
+}
+
+
+.register-page .cursor-light {
+    position: fixed;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: rgba(255, 204, 0, 0.80);
+    filter: blur(70px);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    transition: left 0.08s linear, top 0.08s linear;
+}
