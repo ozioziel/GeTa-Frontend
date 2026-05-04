@@ -12,10 +12,12 @@ type RegisterFormData = {
 
 function RegisterPage() {
   const navigate = useNavigate();
+
   const [lightPosition, setLightPosition] = useState({
     x: window.innerWidth / 2,
     y: window.innerHeight / 2,
   });
+
   const dialogues = [
     <>BIENVENIDO.</>,
     <>ESTE ES UN ESPACIO PARA <span>COMPARTIR</span>.</>,
@@ -35,31 +37,14 @@ function RegisterPage() {
   });
 
   const [error, setError] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
 
-  /*
-    IMPORTANTE:
-    El backend actualmente pide careerId.
-    Como tú dijiste que carrera irá en otro panel, por ahora usamos uno fijo.
-
-    Para obtener un careerId real:
-    GET http://localhost:3000/api/careers
-
-    Luego reemplaza el texto de abajo por un UUID real.
-  */
-  const DEFAULT_CAREER_ID = 'COLOCA_AQUI_UN_UUID_DE_CARRERA';
-
-  /*
-    Cambia esta URL según tu backend.
-    Si tu backend corre en otro puerto, ajusta aquí.
-  */
-  const API_URL = 'http://localhost:3000/api';
   const handleMouseMove = (event: React.MouseEvent<HTMLElement>) => {
-  setLightPosition({
+    setLightPosition({
       x: event.clientX,
       y: event.clientY,
     });
   };
+
   const handleDialogueClick = () => {
     if (dialogueIndex < dialogues.length - 1) {
       setDialogueIndex(dialogueIndex + 1);
@@ -78,12 +63,17 @@ function RegisterPage() {
     }));
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError('');
 
     if (!formData.fullName.trim()) {
       setError('Debes ingresar tu nombre completo');
+      return;
+    }
+
+    if (!formData.email.trim()) {
+      setError('Debes ingresar tu correo');
       return;
     }
 
@@ -102,47 +92,15 @@ function RegisterPage() {
       return;
     }
 
-    if (DEFAULT_CAREER_ID === 'COLOCA_AQUI_UN_UUID_DE_CARRERA') {
-      setError('Falta configurar un careerId temporal en RegisterPage.tsx');
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      const response = await fetch(`${API_URL}/auth/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          fullName: formData.fullName,
-          email: formData.email,
+    navigate('/career-selection', {
+      state: {
+        registerData: {
+          fullName: formData.fullName.trim(),
+          email: formData.email.trim(),
           password: formData.password,
-          careerId: DEFAULT_CAREER_ID,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'No se pudo registrar la cuenta');
-      }
-
-      if (data.accessToken) {
-        localStorage.setItem('accessToken', data.accessToken);
-      }
-
-      navigate('/');
-    } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError('Ocurrió un error inesperado');
-      }
-    } finally {
-      setLoading(false);
-    }
+        },
+      },
+    });
   };
 
   return (
@@ -154,6 +112,7 @@ function RegisterPage() {
           top: `${lightPosition.y}px`,
         }}
       ></div>
+
       {!showForm ? (
         <section
           className="register-dialogue-screen"
@@ -231,12 +190,8 @@ function RegisterPage() {
 
               {error && <p className="register-error">{error}</p>}
 
-              <button
-                type="submit"
-                className="register-button"
-                disabled={loading}
-              >
-                <span>{loading ? 'Registrando...' : 'Registrarme'}</span>
+              <button type="submit" className="register-button">
+                <span>Continuar</span>
                 <span className="button-arrow">→</span>
               </button>
             </form>

@@ -1,0 +1,178 @@
+.home-topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  height: 72px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 18px;
+  padding: 0 24px;
+  background: rgba(6, 8, 13, 0.74);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px);
+}
+
+.topbar-left,
+.topbar-right,
+.topbar-center {
+  display: flex;
+  align-items: center;
+}
+
+.topbar-left {
+  gap: 14px;
+}
+
+.topbar-right {
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.topbar-center {
+  gap: 10px;
+}
+
+.topbar-logo-button {
+  width: 46px;
+  height: 46px;
+  border: none;
+  border-radius: 16px;
+  background: rgba(255, 209, 0, 0.14);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 22px rgba(255, 209, 0, 0.22);
+}
+
+.topbar-logo {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+
+.topbar-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 270px;
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.topbar-search span {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.topbar-search input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: white;
+  font-size: 14px;
+}
+
+.topbar-search input::placeholder {
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.topbar-nav-button,
+.topbar-action-button,
+.topbar-icon-button,
+.topbar-logout-button {
+  border: none;
+  cursor: pointer;
+  color: white;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.topbar-nav-button {
+  height: 42px;
+  min-width: 110px;
+  padding: 0 16px;
+  border-radius: 14px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.62);
+  font-weight: 700;
+}
+
+.topbar-nav-button:hover,
+.topbar-nav-button.active {
+  background: rgba(255, 209, 0, 0.14);
+  color: #ffd100;
+}
+
+.topbar-action-button,
+.topbar-icon-button {
+  height: 40px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.topbar-action-button {
+  padding: 0 16px;
+}
+
+.topbar-icon-button {
+  width: 40px;
+}
+
+.topbar-logout-button {
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: #ffd100;
+  color: #050505;
+  font-weight: 900;
+}
+
+.topbar-logout-button:hover,
+.topbar-action-button:hover,
+.topbar-icon-button:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 1000px) {
+  .home-topbar {
+    grid-template-columns: 1fr auto;
+  }
+
+  .topbar-center {
+    display: none;
+  }
+
+  .topbar-search {
+    width: 220px;
+  }
+}
+
+@media (max-width: 620px) {
+  .home-topbar {
+    height: 66px;
+    padding: 0 12px;
+    gap: 10px;
+  }
+
+  .topbar-search {
+    width: 150px;
+    height: 38px;
+  }
+
+  .topbar-action-button {
+    display: none;
+  }
+
+  .topbar-logout-button {
+    padding: 0 12px;
+  }
+}

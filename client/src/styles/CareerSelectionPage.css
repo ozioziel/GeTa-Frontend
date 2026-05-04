@@ -1,0 +1,382 @@
+.career-selection-page {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: #050505;
+  color: white;
+}
+
+.career-bg-image {
+  position: fixed;
+  inset: -28px;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(1px);
+  opacity: 0.45;
+  transform: scale(1.08);
+  transition:
+    background-image 0.45s ease,
+    opacity 0.35s ease,
+    filter 0.35s ease,
+    transform 0.45s ease;
+}
+
+.career-bg-blur {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  backdrop-filter: blur(2px);
+  background: rgba(0, 0, 0, 0.28);
+}
+
+.career-bg-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  background:
+    radial-gradient(circle at top left, rgba(255, 209, 0, 0.2), transparent 32%),
+    radial-gradient(circle at bottom right, rgba(0, 61, 165, 0.26), transparent 38%),
+    linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.82) 0%,
+      rgba(0, 0, 0, 0.62) 45%,
+      rgba(0, 0, 0, 0.86) 100%
+    );
+}
+
+.career-bg-shine {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.09) 0%,
+      transparent 18%,
+      transparent 78%,
+      rgba(255, 255, 255, 0.04) 100%
+    );
+}
+
+.career-selection-content {
+  position: relative;
+  z-index: 4;
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 70px 0 45px;
+}
+
+.career-selection-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.career-brand {
+  margin: 0 0 14px;
+  font-size: 13px;
+  letter-spacing: 5px;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.career-title {
+  margin: 0;
+  font-size: clamp(36px, 7vw, 78px);
+  font-weight: 900;
+  letter-spacing: -2px;
+  color: #ffd100;
+  text-shadow: 0 0 40px rgba(255, 209, 0, 0.45);
+}
+
+.career-subtitle {
+  width: min(720px, 100%);
+  margin: 14px auto 0;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 16px;
+  line-height: 1.6;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.65);
+}
+
+.career-error {
+  width: min(640px, 100%);
+  margin: 0 auto 24px;
+  padding: 14px 18px;
+  border-radius: 16px;
+  background: rgba(255, 45, 85, 0.14);
+  border: 1px solid rgba(255, 45, 85, 0.38);
+  color: #ffc2cd;
+  text-align: center;
+  font-size: 14px;
+  backdrop-filter: blur(8px);
+}
+
+.career-loading {
+  width: fit-content;
+  margin: 70px auto;
+  padding: 18px 26px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(12px);
+}
+
+.career-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.career-card {
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 28px;
+  overflow: hidden;
+  background: rgba(10, 10, 10, 0.45);
+  color: white;
+  cursor: pointer;
+  text-align: left;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.career-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.42);
+  box-shadow: 0 24px 54px rgba(0, 0, 0, 0.45);
+}
+
+.career-card:disabled {
+  cursor: not-allowed;
+  opacity: 0.78;
+}
+
+.career-card-selected {
+  border-color: #ffd100;
+  background: rgba(255, 209, 0, 0.12);
+  box-shadow:
+    0 0 34px rgba(255, 209, 0, 0.28),
+    0 24px 54px rgba(0, 0, 0, 0.45);
+}
+
+.career-card-top-line {
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(90deg, #ffd100 0%, #ffffff 50%, #003da5 100%);
+}
+
+.career-card-image {
+  height: 125px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition:
+    transform 0.3s ease,
+    filter 0.3s ease;
+}
+
+.career-card:hover .career-card-image,
+.career-card-selected .career-card-image {
+  transform: scale(1.08);
+  filter: saturate(1.15) contrast(1.08);
+}
+
+.career-card-body {
+  position: relative;
+  padding: 18px 18px 22px;
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.career-short {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 16px;
+  border-radius: 18px;
+  font-weight: 900;
+  font-size: 18px;
+  color: #050505;
+  background: #ffd100;
+  box-shadow: 0 0 28px rgba(255, 209, 0, 0.32);
+}
+
+.career-card h2 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  line-height: 1.15;
+  min-height: 42px;
+}
+
+.career-card p {
+  margin: 0;
+  min-height: 48px;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.career-card-action {
+  display: inline-block;
+  margin-top: 18px;
+  color: #ffd100;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.career-continue-button {
+  display: block;
+  min-width: 220px;
+  margin: 34px auto 0;
+  padding: 15px 28px;
+  border: none;
+  border-radius: 999px;
+  background: #ffd100;
+  color: #050505;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 900;
+  box-shadow: 0 0 30px rgba(255, 209, 0, 0.35);
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    opacity 0.22s ease;
+}
+
+.career-continue-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 42px rgba(255, 209, 0, 0.48);
+}
+
+.career-continue-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.career-back-button {
+  display: block;
+  margin: 20px auto 0;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.72);
+  cursor: pointer;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.career-back-button:hover {
+  color: white;
+}
+
+.career-back-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 1100px) {
+  .career-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .career-bg-image {
+    filter: blur(16px);
+    opacity: 0.42;
+  }
+}
+
+@media (max-width: 760px) {
+  .career-selection-content {
+    width: min(100% - 28px, 1180px);
+    padding-top: 42px;
+    padding-bottom: 34px;
+  }
+
+  .career-selection-header {
+    margin-bottom: 28px;
+  }
+
+  .career-brand {
+    font-size: 11px;
+    letter-spacing: 4px;
+  }
+
+  .career-title {
+    font-size: 40px;
+    letter-spacing: -1px;
+  }
+
+  .career-subtitle {
+    font-size: 14px;
+  }
+
+  .career-grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .career-card {
+    border-radius: 24px;
+  }
+
+  .career-card-image {
+    height: 155px;
+  }
+
+  .career-card h2 {
+    min-height: auto;
+  }
+
+  .career-card p {
+    min-height: auto;
+  }
+
+  .career-bg-image {
+    inset: -18px;
+    filter: blur(14px);
+    opacity: 0.38;
+    transform: scale(1.12);
+  }
+
+  .career-bg-overlay {
+    background:
+      radial-gradient(circle at top, rgba(255, 209, 0, 0.16), transparent 34%),
+      linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.86) 0%,
+        rgba(0, 0, 0, 0.62) 45%,
+        rgba(0, 0, 0, 0.9) 100%
+      );
+  }
+
+  .career-continue-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .career-title {
+    font-size: 34px;
+  }
+
+  .career-card-image {
+    height: 135px;
+  }
+
+  .career-short {
+    width: 50px;
+    height: 50px;
+    border-radius: 16px;
+    font-size: 16px;
+  }
+}

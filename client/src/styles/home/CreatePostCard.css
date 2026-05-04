@@ -1,0 +1,241 @@
+.home-page .create-post-card {
+  width: 100%;
+  padding: 20px;
+
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.085);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+
+  backdrop-filter: blur(16px);
+  box-shadow: 0 22px 52px rgba(0, 0, 0, 0.28);
+}
+
+.home-page .create-post-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.home-page .create-post-avatar {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 18px;
+  background: linear-gradient(135deg, #ffd100, #fff1a8);
+  color: #050505;
+
+  font-size: 20px;
+  font-weight: 900;
+
+  box-shadow: 0 0 28px rgba(255, 209, 0, 0.24);
+}
+
+.home-page .create-post-box {
+  flex: 1;
+  min-width: 0;
+}
+
+.home-page .create-post-box textarea {
+  width: 100%;
+  min-height: 74px;
+  max-height: 220px;
+
+  resize: vertical;
+
+  display: block;
+
+  border: none;
+  outline: none;
+  border-radius: 22px;
+
+  padding: 17px 18px;
+
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.home-page .create-post-box textarea::placeholder {
+  color: rgba(255, 255, 255, 0.48);
+}
+
+.home-page .create-post-box textarea:focus {
+  box-shadow:
+    0 0 0 1px rgba(255, 209, 0, 0.45),
+    0 0 26px rgba(255, 209, 0, 0.12);
+}
+
+.home-page .create-post-box textarea:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.home-page .create-post-media-box {
+  margin-top: 12px;
+}
+
+.home-page .create-post-media-box input {
+  width: 100%;
+  height: 46px;
+
+  padding: 0 16px;
+
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 18px;
+
+  background: rgba(0, 0, 0, 0.28);
+  color: white;
+
+  outline: none;
+  font-size: 14px;
+}
+
+.home-page .create-post-media-box input::placeholder {
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.home-page .create-post-media-box input:focus {
+  border-color: rgba(255, 209, 0, 0.55);
+  box-shadow: 0 0 24px rgba(255, 209, 0, 0.12);
+}
+
+.home-page .create-post-media-preview {
+  margin-top: 12px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.home-page .create-post-media-preview img,
+.home-page .create-post-media-preview video {
+  display: block;
+  width: 100%;
+  max-height: 360px;
+
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.home-page .create-post-error {
+  margin: 14px 0 0 66px;
+  padding: 11px 13px;
+
+  border-radius: 14px;
+  background: rgba(255, 45, 85, 0.12);
+  border: 1px solid rgba(255, 45, 85, 0.3);
+
+  color: #ffb7c5;
+  font-size: 13px;
+}
+
+.home-page .create-post-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin-top: 16px;
+  padding-top: 16px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.home-page .create-post-option,
+.home-page .create-post-button {
+  height: 44px;
+
+  border: none;
+  border-radius: 999px;
+
+  cursor: pointer;
+
+  font-size: 14px;
+  font-weight: 900;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.home-page .create-post-option {
+  padding: 0 18px;
+
+  background: rgba(255, 255, 255, 0.09);
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.home-page .create-post-option:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.home-page .create-post-button {
+  margin-left: auto;
+  padding: 0 26px;
+
+  background: #ffd100;
+  color: #050505;
+
+  box-shadow: 0 0 26px rgba(255, 209, 0, 0.3);
+}
+
+.home-page .create-post-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 38px rgba(255, 209, 0, 0.42);
+}
+
+.home-page .create-post-option:disabled,
+.home-page .create-post-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+@media (max-width: 620px) {
+  .home-page .create-post-card {
+    padding: 16px;
+    border-radius: 24px;
+  }
+
+  .home-page .create-post-main {
+    gap: 10px;
+  }
+
+  .home-page .create-post-avatar {
+    width: 46px;
+    height: 46px;
+    flex-basis: 46px;
+    border-radius: 16px;
+  }
+
+  .home-page .create-post-box textarea {
+    min-height: 70px;
+    font-size: 15px;
+  }
+
+  .home-page .create-post-error {
+    margin-left: 0;
+  }
+
+  .home-page .create-post-actions {
+    flex-wrap: wrap;
+  }
+
+  .home-page .create-post-option {
+    flex: 1;
+    min-width: 130px;
+  }
+
+  .home-page .create-post-button {
+    width: 100%;
+    margin-left: 0;
+  }
+}
