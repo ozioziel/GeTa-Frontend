@@ -1,6 +1,5 @@
 import type { User } from '../types/auth.types';
-
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api';
+import { API_URL } from '../config/api';
 
 const TOKEN_KEY = 'accessToken';
 const USER_KEY = 'user';

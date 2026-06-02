@@ -1,7 +1,6 @@
 import { getCurrentUser, getToken } from './authService';
+import { API_URL } from '../config/api';
 import type { Comment } from '../types/post.types';
-
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api';
 
 function getAuthHeaders(): Record<string, string> {
   const token = getToken();

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { API_URL } from '../config/api';
 import '../styles/CareerSelectionPage.css';
 
 type RegisterData = {
@@ -13,8 +14,6 @@ type Career = {
   name: string;
   code?: string;
 };
-
-const API_URL = 'http://localhost:3000/api';
 
 const careerVisuals: Record<
   string,

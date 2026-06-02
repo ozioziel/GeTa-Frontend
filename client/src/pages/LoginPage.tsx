@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+import { API_URL } from '../config/api';
 import '../styles/LoginPage.css';
 import FormCard from '../components/FormCard';
 import { fetchCurrentUser } from '../services/authService';
@@ -10,8 +11,6 @@ type LoginFormData = {
   email: string;
   password: string;
 };
-
-const API_URL = 'http://localhost:3000/api';
 
 function LoginPage() {
   const navigate = useNavigate();

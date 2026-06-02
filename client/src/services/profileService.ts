@@ -1,7 +1,6 @@
-import { getToken, saveCurrentUser } from './authService';
+import { fetchCurrentUser, getToken, saveCurrentUser } from './authService';
+import { API_URL } from '../config/api';
 import type { User } from '../types/auth.types';
-
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api';
 
 function getAuthHeaders(): Record<string, string> {
   const token = getToken();
@@ -19,20 +18,7 @@ export type UpdateProfilePayload = {
 };
 
 export async function getMyProfile(): Promise<User> {
-  const response = await fetch(`${API_URL}/auth/me`, {
-    method: 'GET',
-    headers: getAuthHeaders(),
-  });
-
-  const data = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    throw new Error(data.message || 'No se pudo cargar el perfil');
-  }
-
-  saveCurrentUser(data);
-
-  return data;
+  return fetchCurrentUser();
 }
 
 export async function updateMyProfile(
@@ -53,7 +39,7 @@ export async function updateMyProfile(
     );
   }
 
-  saveCurrentUser(data);
-
-  return data;
+  const currentUser = await fetchCurrentUser();
+  saveCurrentUser(currentUser);
+  return currentUser;
 }

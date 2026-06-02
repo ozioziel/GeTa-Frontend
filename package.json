@@ -1,0 +1,14 @@
+{
+  "name": "geta-web",
+  "private": true,
+  "scripts": {
+    "dev:client": "npm --prefix ./client run dev",
+    "dev:backend": "npm --prefix ./Backend run start:dev",
+    "build:client": "npm --prefix ./client run build",
+    "build:backend": "npm --prefix ./Backend run build",
+    "lint:client": "npm --prefix ./client run lint",
+    "lint:backend": "npm --prefix ./Backend run lint",
+    "db:check": "npm --prefix ./Backend run db:check",
+    "db:setup": "npm --prefix ./Backend run db:setup"
+  }
+}
