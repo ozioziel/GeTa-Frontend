@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { getCurrentUser } from '../../services/authService';
 
 type CommentInputProps = {
   onAddComment: (content: string) => Promise<void> | void;
@@ -7,6 +8,12 @@ type CommentInputProps = {
 
 function CommentInput({ onAddComment, disabled = false }: CommentInputProps) {
   const [content, setContent] = useState('');
+
+  const currentUser = getCurrentUser();
+  const avatarLetter =
+    currentUser?.profile?.fullName?.charAt(0).toUpperCase() ||
+    currentUser?.email?.charAt(0).toUpperCase() ||
+    'G';
 
   const handleSubmit = async () => {
     const cleanContent = content.trim();
@@ -20,7 +27,7 @@ function CommentInput({ onAddComment, disabled = false }: CommentInputProps) {
 
   return (
     <div className="comment-input-wrapper">
-      <div className="comment-input-avatar">T</div>
+      <div className="comment-input-avatar">{avatarLetter}</div>
 
       <input
         type="text"

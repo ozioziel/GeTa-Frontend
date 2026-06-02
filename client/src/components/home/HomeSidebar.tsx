@@ -1,26 +1,57 @@
+import type { ReactNode } from 'react';
 import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo/logo.png';
+import type { DashboardView } from '../../types/dashboard.types';
+import {
+  BookmarkIcon,
+  CompassIcon,
+  HomeIcon,
+  PlusSquareIcon,
+  SearchIcon,
+  UserIcon,
+} from '../icons/AppIcons';
 import '../../styles/home/HomeSidebar.css';
 
 type SidebarItem = {
   label: string;
-  icon: string;
-  path: string;
+  view: DashboardView;
+  extra?: Record<string, string>;
+  icon: ReactNode;
+};
+
+type HomeSidebarProps = {
+  activeView?: DashboardView;
 };
 
 const sidebarItems: SidebarItem[] = [
-  { label: 'Inicio', icon: '⌂', path: '/home' },
-  { label: 'Buscar', icon: '⌕', path: '/home' },
-  { label: 'Explorar', icon: '◇', path: '/home' },
-  { label: 'Crear', icon: '✚', path: '/home' },
-  { label: 'Guardados', icon: '♡', path: '/home' },
-  { label: 'Perfil', icon: '◉', path: '/profile' },
+  { label: 'Inicio', icon: <HomeIcon size={24} />, view: 'feed' },
+  { label: 'Buscar', icon: <SearchIcon size={24} />, view: 'search' },
+  { label: 'Explorar', icon: <CompassIcon size={24} />, view: 'explore' },
+  {
+    label: 'Crear',
+    icon: <PlusSquareIcon size={24} />,
+    view: 'feed',
+    extra: { composer: '1' },
+  },
+  { label: 'Guardados', icon: <BookmarkIcon size={24} />, view: 'saved' },
+  { label: 'Perfil', icon: <UserIcon size={24} />, view: 'profile' },
 ];
 
-function HomeSidebar() {
+function buildHomeSearch(view: DashboardView, extra?: Record<string, string>) {
+  const params = new URLSearchParams({ view });
+
+  Object.entries(extra || {}).forEach(([key, value]) => {
+    if (value) {
+      params.set(key, value);
+    }
+  });
+
+  return `?${params.toString()}`;
+}
+
+function HomeSidebar({ activeView = 'feed' }: HomeSidebarProps) {
   const navigate = useNavigate();
-  const location = useLocation();
   const [isHidden, setIsHidden] = useState(false);
 
   if (isHidden) {
@@ -29,42 +60,59 @@ function HomeSidebar() {
         type="button"
         className="sidebar-open-button"
         onClick={() => setIsHidden(false)}
-        title="Mostrar menú"
+        title="Mostrar menu"
       >
-        ☰
+        +
       </button>
     );
   }
 
   return (
     <aside className="home-sidebar">
-      <div className="sidebar-logo-wrapper" onClick={() => navigate('/home')}>
+      <button
+        type="button"
+        className="sidebar-logo-wrapper"
+        onClick={() => navigate('/home?view=feed')}
+        aria-label="Ir al inicio"
+      >
         <img src={logo} alt="GeTa" className="sidebar-logo" />
-      </div>
+      </button>
 
       <nav className="sidebar-icon-menu">
-        {sidebarItems.map((item) => (
-          <button
-            key={item.label}
-            type="button"
-            className={`sidebar-icon-item ${
-              location.pathname === item.path ? 'active' : ''
-            }`}
-            title={item.label}
-            onClick={() => navigate(item.path)}
-          >
-            <span>{item.icon}</span>
-          </button>
-        ))}
+        {sidebarItems.map((item) => {
+          const isProfile = item.view === 'profile';
+          const isActive = isProfile
+            ? activeView === 'profile'
+            : activeView === item.view;
+
+          return (
+            <button
+              key={item.label}
+              type="button"
+              className={isActive ? 'sidebar-icon-item active' : 'sidebar-icon-item'}
+              title={item.label}
+              onClick={() =>
+                navigate(
+                  isProfile
+                    ? '/profile'
+                    : `/home${buildHomeSearch(item.view, item.extra)}`,
+                )
+              }
+            >
+              <span>{item.icon}</span>
+              <small>{item.label}</small>
+            </button>
+          );
+        })}
       </nav>
 
       <button
         type="button"
         className="sidebar-hide-button"
         onClick={() => setIsHidden(true)}
-        title="Ocultar menú"
+        title="Ocultar menu"
       >
-        ×
+        x
       </button>
     </aside>
   );

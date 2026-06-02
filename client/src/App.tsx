@@ -21,8 +21,9 @@ function App() {
         <Route path="/home" element={<HomePage />} />
 
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/profile/:userId" element={<ProfilePage />} />
 
-        <Route path="*" element={<h1>404 - Página no encontrada</h1>} />
+        <Route path="*" element={<h1>404 - Pagina no encontrada</h1>} />
       </Routes>
     </BrowserRouter>
   );

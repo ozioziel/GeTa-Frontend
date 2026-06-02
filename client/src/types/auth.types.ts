@@ -9,6 +9,7 @@ export type Profile = {
   campus?: string;
   careerId?: string;
   career?: Career;
+  user?: User;
 };
 
 export type User = {

@@ -4,11 +4,20 @@ type CommentListProps = {
   comments: Comment[];
 };
 
+function formatDate(date: string) {
+  return new Date(date).toLocaleString('es-BO', {
+    day: '2-digit',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
 function CommentList({ comments }: CommentListProps) {
   if (comments.length === 0) {
     return (
       <p className="comment-empty">
-        Todavía no hay comentarios. Sé el primero en comentar.
+        Todavia no hay comentarios. Se el primero en comentar.
       </p>
     );
   }
@@ -22,7 +31,10 @@ function CommentList({ comments }: CommentListProps) {
           </div>
 
           <div className="comment-bubble">
-            <h4>{comment.authorName}</h4>
+            <div className="comment-meta">
+              <h4>{comment.authorName}</h4>
+              <span>{formatDate(comment.createdAt)}</span>
+            </div>
             <p>{comment.content}</p>
           </div>
         </div>

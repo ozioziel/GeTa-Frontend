@@ -1,15 +1,33 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CommentList from './CommentList';
 import CommentInput from './CommentInput';
 import {
   createComment,
   getCommentsByPost,
 } from '../../services/commentService';
+import {
+  deletePost,
+  likePost,
+  savePost,
+  unlikePost,
+  unsavePost,
+} from '../../services/postService';
 import type { Comment, Post } from '../../types/post.types';
+import {
+  BookmarkIcon,
+  CommentIcon,
+  HeartIcon,
+  MoreIcon,
+  ShareIcon,
+  UserIcon,
+} from '../icons/AppIcons';
 import '../../styles/home/PostCard.css';
 
 type PostCardProps = {
   post: Post;
+  onPostUpdated?: (post: Post) => void;
+  onPostDeleted?: (postId: string) => void;
 };
 
 function formatDate(date: string) {
@@ -23,22 +41,47 @@ function formatDate(date: string) {
   });
 }
 
-function PostCard({ post }: PostCardProps) {
+function PostCard({ post, onPostUpdated, onPostDeleted }: PostCardProps) {
+  const navigate = useNavigate();
+
   const [comments, setComments] = useState<Comment[]>(post.comments || []);
-  const [liked, setLiked] = useState(false);
-  const [showComments, setShowComments] = useState(true);
+  const [liked, setLiked] = useState(post.likedByCurrentUser);
+  const [saved, setSaved] = useState(post.savedByCurrentUser);
+  const [likesCount, setLikesCount] = useState(post.likesCount);
+  const [commentsCount, setCommentsCount] = useState(post.commentsCount);
+  const [showComments, setShowComments] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
   const [loadingComments, setLoadingComments] = useState<boolean>(false);
   const [creatingComment, setCreatingComment] = useState<boolean>(false);
+  const [busyAction, setBusyAction] = useState<string>('');
   const [commentError, setCommentError] = useState<string>('');
+  const [actionMessage, setActionMessage] = useState<string>('');
+  const [hasLoadedComments, setHasLoadedComments] = useState(
+    (post.comments || []).length > 0,
+  );
+
+  useEffect(() => {
+    setComments(post.comments || []);
+    setLiked(post.likedByCurrentUser);
+    setSaved(post.savedByCurrentUser);
+    setLikesCount(post.likesCount);
+    setCommentsCount(post.commentsCount);
+  }, [post]);
 
   useEffect(() => {
     const loadComments = async () => {
+      if (!showComments || hasLoadedComments) {
+        return;
+      }
+
       try {
         setLoadingComments(true);
         setCommentError('');
 
         const commentsFromApi = await getCommentsByPost(post.id);
         setComments(commentsFromApi);
+        setCommentsCount(commentsFromApi.length);
+        setHasLoadedComments(true);
       } catch {
         setCommentError('No se pudieron cargar los comentarios');
       } finally {
@@ -47,7 +90,26 @@ function PostCard({ post }: PostCardProps) {
     };
 
     loadComments();
-  }, [post.id]);
+  }, [hasLoadedComments, post.id, showComments]);
+
+  const authorLetter = useMemo(
+    () => post.authorName.charAt(0).toUpperCase(),
+    [post.authorName],
+  );
+
+  const applyUpdatedPost = (updatedPost: Post) => {
+    setLiked(updatedPost.likedByCurrentUser);
+    setSaved(updatedPost.savedByCurrentUser);
+    setLikesCount(updatedPost.likesCount);
+    setCommentsCount(updatedPost.commentsCount);
+
+    if (updatedPost.comments.length > 0) {
+      setComments(updatedPost.comments);
+      setHasLoadedComments(true);
+    }
+
+    onPostUpdated?.(updatedPost);
+  };
 
   const handleAddComment = async (content: string) => {
     try {
@@ -57,71 +119,206 @@ function PostCard({ post }: PostCardProps) {
       const newComment = await createComment(post.id, content);
 
       setComments((prevComments) => [...prevComments, newComment]);
+      setCommentsCount((prev) => prev + 1);
       setShowComments(true);
+      setHasLoadedComments(true);
+      setActionMessage('Comentario publicado.');
     } catch (err) {
       setCommentError(
         err instanceof Error
           ? err.message
-          : 'No se pudo crear el comentario'
+          : 'No se pudo crear el comentario',
       );
     } finally {
       setCreatingComment(false);
     }
   };
 
+  const handleLikeToggle = async () => {
+    try {
+      setBusyAction('like');
+      const updatedPost = liked ? await unlikePost(post.id) : await likePost(post.id);
+      applyUpdatedPost(updatedPost);
+    } catch (err) {
+      setActionMessage(
+        err instanceof Error ? err.message : 'No se pudo actualizar el like.',
+      );
+    } finally {
+      setBusyAction('');
+    }
+  };
+
+  const handleSaveToggle = async () => {
+    try {
+      setBusyAction('save');
+      const updatedPost = saved ? await unsavePost(post.id) : await savePost(post.id);
+      applyUpdatedPost(updatedPost);
+      setActionMessage(saved ? 'Se quitó de guardados.' : 'Se guardó la publicación.');
+    } catch (err) {
+      setActionMessage(
+        err instanceof Error ? err.message : 'No se pudo actualizar guardados.',
+      );
+    } finally {
+      setBusyAction('');
+    }
+  };
+
+  const handleDelete = async () => {
+    const confirmed = window.confirm(
+      'Esta publicación se ocultará del feed. ¿Deseas continuar?',
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      setBusyAction('delete');
+      await deletePost(post.id);
+      onPostDeleted?.(post.id);
+    } catch (err) {
+      setActionMessage(
+        err instanceof Error ? err.message : 'No se pudo eliminar la publicación.',
+      );
+    } finally {
+      setBusyAction('');
+      setShowMenu(false);
+    }
+  };
+
+  const handleShare = async () => {
+    try {
+      const url = `${window.location.origin}/home?view=feed&postId=${post.id}`;
+      await navigator.clipboard.writeText(url);
+      setActionMessage('Enlace copiado al portapapeles.');
+    } catch {
+      setActionMessage('No se pudo copiar el enlace, pero la acción ya existe.');
+    }
+  };
+
+  const renderMedia = () => {
+    if (!post.mediaUrl) {
+      return null;
+    }
+
+    const isVideo = post.mediaUrl.match(/\.(mp4|webm|ogg)$/i);
+
+    return (
+      <div className="post-media-wrapper">
+        {isVideo ? (
+          <video src={post.mediaUrl} className="post-media" controls />
+        ) : (
+          <img src={post.mediaUrl} alt="Publicacion" className="post-media" />
+        )}
+      </div>
+    );
+  };
+
   return (
     <article className="post-card">
       <div className="post-header">
-        <div className="post-avatar">
-          {post.authorName.charAt(0).toUpperCase()}
-        </div>
+        <button
+          type="button"
+          className="post-avatar post-avatar-button"
+          onClick={() =>
+            navigate(post.authorId ? `/profile/${post.authorId}` : '/profile')
+          }
+        >
+          {authorLetter}
+        </button>
 
         <div className="post-author-info">
-          <h3>{post.authorName}</h3>
+          <button
+            type="button"
+            className="post-author-link"
+            onClick={() =>
+              navigate(post.authorId ? `/profile/${post.authorId}` : '/profile')
+            }
+          >
+            {post.authorName}
+          </button>
 
           <p>
-            {post.authorCareer?.name || 'Estudiante UCB'} ·{' '}
-            {formatDate(post.createdAt)}
+            {post.authorCareer?.name || 'Estudiante UCB'} · {formatDate(post.createdAt)}
           </p>
         </div>
 
-        <button type="button" className="post-more-button">
-          •••
-        </button>
+        <div className="post-header-actions">
+          <button
+            type="button"
+            className="post-more-button"
+            onClick={() => setShowMenu((prev) => !prev)}
+          >
+            <MoreIcon size={18} />
+          </button>
+
+          {showMenu && (
+            <div className="post-menu">
+              <button
+                type="button"
+                onClick={() =>
+                  navigate(post.authorId ? `/profile/${post.authorId}` : '/profile')
+                }
+              >
+                <UserIcon size={14} />
+                <span>Ver perfil</span>
+              </button>
+
+              {post.canDelete && (
+                <button type="button" onClick={handleDelete}>
+                  <span>Eliminar publicacion</span>
+                </button>
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       <p className="post-content">{post.content}</p>
-
-      {post.mediaUrl && (
-        <img src={post.mediaUrl} alt="Publicación" className="post-media" />
-      )}
+      {renderMedia()}
 
       <div className="post-stats">
-        <span>{liked ? '1 reacción' : 'Sé el primero en reaccionar'}</span>
-        <span>{comments.length} comentarios</span>
+        <span>{likesCount > 0 ? `${likesCount} reacciones` : 'Sin reacciones aún'}</span>
+        <span>{commentsCount} comentarios</span>
       </div>
 
       <div className="post-actions">
         <button
           type="button"
           className={liked ? 'post-action active' : 'post-action'}
-          onClick={() => setLiked((prev) => !prev)}
+          onClick={handleLikeToggle}
+          disabled={busyAction === 'like'}
         >
-          Me gusta
+          <HeartIcon size={16} />
+          <span>{liked ? 'Te gusta' : 'Me gusta'}</span>
         </button>
 
         <button
           type="button"
-          className="post-action"
+          className={showComments ? 'post-action active' : 'post-action'}
           onClick={() => setShowComments((prev) => !prev)}
         >
-          Comentar
+          <CommentIcon size={16} />
+          <span>Comentar</span>
         </button>
 
-        <button type="button" className="post-action">
-          Compartir
+        <button
+          type="button"
+          className={saved ? 'post-action active' : 'post-action'}
+          onClick={handleSaveToggle}
+          disabled={busyAction === 'save'}
+        >
+          <BookmarkIcon size={16} />
+          <span>{saved ? 'Guardado' : 'Guardar'}</span>
+        </button>
+
+        <button type="button" className="post-action" onClick={handleShare}>
+          <ShareIcon size={16} />
+          <span>Compartir</span>
         </button>
       </div>
+
+      {actionMessage && <p className="post-feedback">{actionMessage}</p>}
 
       {showComments && (
         <div className="post-comments">

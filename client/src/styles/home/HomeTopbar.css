@@ -57,7 +57,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  width: 270px;
+  width: 300px;
   height: 42px;
   padding: 0 14px;
   border-radius: 999px;
@@ -65,8 +65,9 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.topbar-search span {
+.topbar-search-icon {
   color: rgba(255, 255, 255, 0.55);
+  display: inline-flex;
 }
 
 .topbar-search input {
@@ -98,12 +99,16 @@
 
 .topbar-nav-button {
   height: 42px;
-  min-width: 110px;
+  min-width: 120px;
   padding: 0 16px;
   border-radius: 14px;
   background: transparent;
   color: rgba(255, 255, 255, 0.62);
   font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .topbar-nav-button:hover,
@@ -117,6 +122,11 @@
   height: 40px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
 }
 
 .topbar-action-button {
@@ -127,6 +137,23 @@
   width: 40px;
 }
 
+.topbar-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: #ff6b35;
+  color: white;
+  font-size: 11px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .topbar-logout-button {
   height: 40px;
   padding: 0 16px;
@@ -134,6 +161,9 @@
   background: #ffd100;
   color: #050505;
   font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .topbar-logout-button:hover,
@@ -142,7 +172,7 @@
   transform: translateY(-2px);
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1100px) {
   .home-topbar {
     grid-template-columns: 1fr auto;
   }
@@ -150,9 +180,16 @@
   .topbar-center {
     display: none;
   }
+}
 
+@media (max-width: 760px) {
   .topbar-search {
-    width: 220px;
+    width: 190px;
+  }
+
+  .topbar-action-button span,
+  .topbar-logout-button span {
+    display: none;
   }
 }
 
@@ -166,13 +203,5 @@
   .topbar-search {
     width: 150px;
     height: 38px;
-  }
-
-  .topbar-action-button {
-    display: none;
-  }
-
-  .topbar-logout-button {
-    padding: 0 12px;
   }
 }

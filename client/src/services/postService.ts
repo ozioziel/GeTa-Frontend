@@ -1,15 +1,6 @@
-import { getCurrentCareerId, getCurrentUser, getToken } from './authService';
-import { API_URL } from '../config/api';
+import { getCurrentCareerId, getCurrentUser } from './authService';
+import { requestJson } from './http';
 import type { Post, Comment } from '../types/post.types';
-
-function getAuthHeaders(): Record<string, string> {
-  const token = getToken();
-
-  return {
-    'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-  };
-}
 
 function getLocalUserFullName(rawPost?: any): string | null {
   const user = getCurrentUser();
@@ -64,7 +55,7 @@ function normalizeComment(rawComment: any): Comment {
   const localUser = getCurrentUser();
 
   const localFullName =
-    localUser?.profile?.fullName || (localUser as any)?.fullName || 'Tú';
+    localUser?.profile?.fullName || (localUser as any)?.fullName || 'Tu';
 
   const commentAuthorId =
     rawComment.authorId ||
@@ -79,6 +70,7 @@ function normalizeComment(rawComment: any): Comment {
     id: rawComment.id,
     postId: rawComment.postId,
     authorId: rawComment.authorId,
+    author: rawComment.author || null,
     authorName:
       rawComment.author?.profile?.fullName ||
       rawComment.author?.fullName ||
@@ -103,12 +95,21 @@ export function normalizePost(rawPost: any): Post {
   return {
     id: rawPost.id,
     authorId: rawPost.authorId || rawPost.userId,
+    careerId: rawPost.careerId,
+    author: rawPost.author || null,
     authorName: getAuthorName(rawPost),
     authorCareer: getCareer(rawPost),
     content: rawPost.content,
     mediaUrl: rawPost.mediaUrl || null,
     createdAt: rawPost.createdAt || new Date().toISOString(),
+    updatedAt: rawPost.updatedAt || rawPost.createdAt || new Date().toISOString(),
     comments: rawComments.map(normalizeComment),
+    likesCount: Number(rawPost.likesCount || 0),
+    commentsCount: Number(rawPost.commentsCount || rawComments.length || 0),
+    likedByCurrentUser: Boolean(rawPost.likedByCurrentUser),
+    savedByCurrentUser: Boolean(rawPost.savedByCurrentUser),
+    canEdit: Boolean(rawPost.canEdit),
+    canDelete: Boolean(rawPost.canDelete),
   };
 }
 
@@ -120,20 +121,33 @@ function extractArrayResponse(data: any): any[] {
   return [];
 }
 
-export async function getPosts(): Promise<Post[]> {
-  const response = await fetch(`${API_URL}/posts`, {
-    method: 'GET',
-    headers: getAuthHeaders(),
-  });
+export type GetPostsParams = {
+  careerId?: string;
+  authorId?: string;
+};
 
-  const data = await response.json().catch(() => ({}));
+export async function getPosts(params: GetPostsParams = {}): Promise<Post[]> {
+  const search = new URLSearchParams();
 
-  if (!response.ok) {
-    throw new Error(data.message || 'No se pudieron cargar las publicaciones');
+  if (params.careerId) {
+    search.set('careerId', params.careerId);
   }
 
+  if (params.authorId) {
+    search.set('authorId', params.authorId);
+  }
+
+  const data = await requestJson<any>(
+    `/posts${search.toString() ? `?${search.toString()}` : ''}`,
+  );
   const posts = extractArrayResponse(data);
 
+  return posts.map(normalizePost);
+}
+
+export async function getSavedPosts(): Promise<Post[]> {
+  const data = await requestJson<any>('/posts/saved/me');
+  const posts = extractArrayResponse(data);
   return posts.map(normalizePost);
 }
 
@@ -149,19 +163,50 @@ export async function createPost(
     ...(mediaUrl ? { mediaUrl } : {}),
   };
 
-  const response = await fetch(`${API_URL}/posts`, {
+  const data = await requestJson<any>('/posts', {
     method: 'POST',
-    headers: getAuthHeaders(),
     body: JSON.stringify(body),
   });
-
-  const data = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    throw new Error(data.message || 'No se pudo crear la publicación');
-  }
 
   const rawPost = data.data || data.post || data;
 
   return normalizePost(rawPost);
+}
+
+export async function likePost(postId: string): Promise<Post> {
+  const data = await requestJson<any>(`/posts/${postId}/like`, {
+    method: 'POST',
+  });
+
+  return normalizePost(data.post || data);
+}
+
+export async function unlikePost(postId: string): Promise<Post> {
+  const data = await requestJson<any>(`/posts/${postId}/like`, {
+    method: 'DELETE',
+  });
+
+  return normalizePost(data.post || data);
+}
+
+export async function savePost(postId: string): Promise<Post> {
+  const data = await requestJson<any>(`/posts/${postId}/save`, {
+    method: 'POST',
+  });
+
+  return normalizePost(data.post || data);
+}
+
+export async function unsavePost(postId: string): Promise<Post> {
+  const data = await requestJson<any>(`/posts/${postId}/save`, {
+    method: 'DELETE',
+  });
+
+  return normalizePost(data.post || data);
+}
+
+export async function deletePost(postId: string): Promise<void> {
+  await requestJson(`/posts/${postId}`, {
+    method: 'DELETE',
+  });
 }

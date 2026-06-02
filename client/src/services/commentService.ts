@@ -1,5 +1,5 @@
 import { getCurrentUser, getToken } from './authService';
-import { API_URL } from '../config/api';
+import { requestJson } from './http';
 import type { Comment } from '../types/post.types';
 
 function getAuthHeaders(): Record<string, string> {
@@ -17,7 +17,7 @@ function getCommentAuthorName(rawComment: any): string {
   const localFullName =
     localUser?.profile?.fullName ||
     (localUser as any)?.fullName ||
-    'Tú';
+    'Tu';
 
   const commentAuthorId =
     rawComment.authorId ||
@@ -47,6 +47,7 @@ function normalizeComment(rawComment: any): Comment {
     id: rawComment.id,
     postId: rawComment.postId,
     authorId: rawComment.authorId,
+    author: rawComment.author || null,
     authorName: getCommentAuthorName(rawComment),
     content: rawComment.content,
     createdAt: rawComment.createdAt || new Date().toISOString(),
@@ -62,16 +63,9 @@ function extractArrayResponse(data: any): any[] {
 }
 
 export async function getCommentsByPost(postId: string): Promise<Comment[]> {
-  const response = await fetch(`${API_URL}/comments/post/${postId}`, {
-    method: 'GET',
+  const data = await requestJson<any>(`/comments/post/${postId}`, {
     headers: getAuthHeaders(),
   });
-
-  const data = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    throw new Error(data.message || 'No se pudieron cargar los comentarios');
-  }
 
   const comments = extractArrayResponse(data);
 
@@ -82,7 +76,7 @@ export async function createComment(
   postId: string,
   content: string,
 ): Promise<Comment> {
-  const response = await fetch(`${API_URL}/comments`, {
+  const data = await requestJson<any>('/comments', {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify({
@@ -90,12 +84,6 @@ export async function createComment(
       content,
     }),
   });
-
-  const data = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    throw new Error(data.message || 'No se pudo crear el comentario');
-  }
 
   const rawComment = data.data || data.comment || data;
 
