@@ -1,4 +1,5 @@
 import { getCurrentCareerId, getCurrentUser } from './authService';
+import { resolveApiAssetUrl } from '../config/api';
 import { requestJson } from './http';
 import type { Post, Comment } from '../types/post.types';
 import {
@@ -128,7 +129,7 @@ export function normalizePost(rawPost: any): Post {
     authorName: getAuthorName(rawPost),
     authorCareer: getCareer(rawPost),
     content: rawPost.content,
-    mediaUrl: rawPost.mediaUrl || null,
+    mediaUrl: resolveApiAssetUrl(rawPost.mediaUrl),
     createdAt: rawPost.createdAt || new Date().toISOString(),
     updatedAt: rawPost.updatedAt || rawPost.createdAt || new Date().toISOString(),
     comments: rawComments.map(normalizeComment),

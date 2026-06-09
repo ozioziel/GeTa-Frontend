@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
-import { getCurrentUser } from '../../services/authService';
-import FallbackImage from '../common/FallbackImage';
-import { PlusSquareIcon } from '../icons/AppIcons';
-import '../../styles/home/CreatePostCard.css';
+import { useEffect, useMemo, useRef, useState } from "react";
+import { getCurrentUser } from "../../services/authService";
+import { uploadMedia } from "../../services/uploadService";
+import FallbackImage from "../common/FallbackImage";
+import { PlusSquareIcon } from "../icons/AppIcons";
+import "../../styles/home/CreatePostCard.css";
 
 type CreatePostCardProps = {
   onCreatePost: (content: string, mediaUrl?: string) => Promise<void> | void;
@@ -16,17 +17,18 @@ function CreatePostCard({
   highlightComposer = false,
 }: CreatePostCardProps) {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  const [content, setContent] = useState('');
-  const [mediaUrl, setMediaUrl] = useState('');
+  const [content, setContent] = useState("");
+  const [mediaUrl, setMediaUrl] = useState("");
+  const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [showMediaInput, setShowMediaInput] = useState(false);
-  const [error, setError] = useState('');
-  const [note, setNote] = useState('');
+  const [error, setError] = useState("");
+  const [note, setNote] = useState("");
 
   const currentUser = getCurrentUser();
   const avatarLetter =
     currentUser?.profile?.fullName?.charAt(0).toUpperCase() ||
     currentUser?.email?.charAt(0).toUpperCase() ||
-    'G';
+    "G";
 
   useEffect(() => {
     if (!highlightComposer || !textareaRef.current) {
@@ -34,39 +36,82 @@ function CreatePostCard({
     }
 
     textareaRef.current.focus();
-    textareaRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    textareaRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
   }, [highlightComposer]);
+
+  const mediaPreviewUrl = useMemo(
+    () => (mediaFile ? URL.createObjectURL(mediaFile) : ""),
+    [mediaFile],
+  );
+
+  useEffect(() => {
+    return () => {
+      if (mediaPreviewUrl) {
+        URL.revokeObjectURL(mediaPreviewUrl);
+      }
+    };
+  }, [mediaPreviewUrl]);
 
   const handleSubmit = async () => {
     const cleanContent = content.trim();
     const cleanMediaUrl = mediaUrl.trim();
 
-    if (!cleanContent && !cleanMediaUrl) {
-      setError('Escribe algo o agrega una imagen o video antes de publicar.');
+    if (!cleanContent && !cleanMediaUrl && !mediaFile) {
+      setError("Escribe algo o agrega una imagen o video antes de publicar.");
       return;
     }
 
-    if (cleanMediaUrl && !cleanMediaUrl.startsWith('http')) {
-      setError('La URL debe comenzar con http o https.');
+    if (cleanMediaUrl && !/^https?:\/\//i.test(cleanMediaUrl)) {
+      setError("La URL debe comenzar con http o https.");
       return;
     }
 
-    await onCreatePost(cleanContent || ' ', cleanMediaUrl || undefined);
+    if (cleanMediaUrl && /\/uploads\/?$/i.test(cleanMediaUrl)) {
+      setError("La URL de uploads debe incluir el nombre del archivo.");
+      return;
+    }
 
-    setContent('');
-    setMediaUrl('');
+    if (cleanMediaUrl && mediaFile) {
+      setError("Elige un archivo o pega una URL, no ambos.");
+      return;
+    }
+
+    let finalMediaUrl = cleanMediaUrl || undefined;
+
+    if (mediaFile) {
+      setNote("Subiendo archivo...");
+      finalMediaUrl = await uploadMedia(mediaFile);
+    }
+
+    await onCreatePost(cleanContent || " ", finalMediaUrl);
+
+    setContent("");
+    setMediaUrl("");
+    setMediaFile(null);
     setShowMediaInput(false);
-    setError('');
-    setNote('Tu publicacion ya esta en el feed.');
+    setError("");
+    setNote("Tu publicacion ya esta en el feed.");
+  };
+
+  const handleMediaFileChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const selectedFile = event.target.files?.[0] || null;
+    setMediaFile(selectedFile);
+
+    if (selectedFile) {
+      setMediaUrl("");
+      setError("");
+    }
   };
 
   const handleUseEventTemplate = () => {
     setContent((prev) =>
       prev.trim()
         ? `${prev}\n\nEvento UCB:\nFecha:\nLugar:\nInvitados:\n`
-        : 'Evento UCB:\nFecha:\nLugar:\nInvitados:\n',
+        : "Evento UCB:\nFecha:\nLugar:\nInvitados:\n",
     );
-    setNote('Se agrego una plantilla rapida para eventos.');
+    setNote("Se agrego una plantilla rapida para eventos.");
     textareaRef.current?.focus();
   };
 
@@ -86,21 +131,37 @@ function CreatePostCard({
 
           {showMediaInput && (
             <div className="create-post-media-box">
+              <label className="create-post-file-drop">
+                <input
+                  type="file"
+                  accept="image/*,video/mp4,video/webm,video/ogg"
+                  onChange={handleMediaFileChange}
+                  disabled={loading}
+                />
+                <span>
+                  {mediaFile ? mediaFile.name : "Seleccionar imagen o video"}
+                </span>
+              </label>
+
               <input
                 type="url"
                 placeholder="Pega una URL de imagen o video..."
                 value={mediaUrl}
-                onChange={(event) => setMediaUrl(event.target.value)}
+                onChange={(event) => {
+                  setMediaUrl(event.target.value);
+                  setMediaFile(null);
+                }}
                 disabled={loading}
               />
 
-              {mediaUrl && (
+              {(mediaPreviewUrl || mediaUrl) && (
                 <div className="create-post-media-preview">
-                  {mediaUrl.match(/\.(mp4|webm|ogg)$/i) ? (
-                    <video src={mediaUrl} controls />
+                  {mediaFile?.type.startsWith("video/") ||
+                  mediaUrl.match(/\.(mp4|webm|ogg)(\?.*)?$/i) ? (
+                    <video src={mediaPreviewUrl || mediaUrl} controls />
                   ) : (
                     <FallbackImage
-                      src={mediaUrl}
+                      src={mediaPreviewUrl || mediaUrl}
                       alt="Vista previa"
                       fallback={
                         <div className="create-post-media-fallback">
@@ -124,7 +185,10 @@ function CreatePostCard({
           type="button"
           className="create-post-option"
           disabled={loading}
-          onClick={() => setShowMediaInput((prev) => !prev)}
+          onClick={() => {
+            setShowMediaInput((prev) => !prev);
+            setError("");
+          }}
         >
           Imagen / Video
         </button>
@@ -145,7 +209,7 @@ function CreatePostCard({
           disabled={loading}
         >
           <PlusSquareIcon size={16} />
-          <span>{loading ? 'Publicando...' : 'Publicar'}</span>
+          <span>{loading ? "Publicando..." : "Publicar"}</span>
         </button>
       </div>
     </article>
