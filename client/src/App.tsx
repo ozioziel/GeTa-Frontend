@@ -5,6 +5,8 @@ import RegisterPage from './pages/RegisterPage';
 import CareerSelectionPage from './pages/CareerSelectionPage';
 import HomePage from './pages/HomePage';
 import ProfilePage from './pages/ProfilePage';
+import ProtectedRoute from './components/routes/ProtectedRoute';
+import PublicOnlyRoute from './components/routes/PublicOnlyRoute';
 
 function App() {
   return (
@@ -12,16 +14,17 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
 
-        <Route path="/login" element={<LoginPage />} />
+        <Route element={<PublicOnlyRoute />}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/career-selection" element={<CareerSelectionPage />} />
+        </Route>
 
-        <Route path="/register" element={<RegisterPage />} />
-
-        <Route path="/career-selection" element={<CareerSelectionPage />} />
-
-        <Route path="/home" element={<HomePage />} />
-
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/profile/:userId" element={<ProfilePage />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/profile/:userId" element={<ProfilePage />} />
+        </Route>
 
         <Route path="*" element={<h1>404 - Pagina no encontrada</h1>} />
       </Routes>

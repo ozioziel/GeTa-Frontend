@@ -2,10 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CommentList from './CommentList';
 import CommentInput from './CommentInput';
-import {
-  createComment,
-  getCommentsByPost,
-} from '../../services/commentService';
+import { createComment, getCommentsByPost } from '../../services/commentService';
 import {
   deletePost,
   likePost,
@@ -22,10 +19,12 @@ import {
   ShareIcon,
   UserIcon,
 } from '../icons/AppIcons';
+import FallbackImage from '../common/FallbackImage';
 import '../../styles/home/PostCard.css';
 
 type PostCardProps = {
   post: Post;
+  highlight?: boolean;
   onPostUpdated?: (post: Post) => void;
   onPostDeleted?: (postId: string) => void;
 };
@@ -41,7 +40,12 @@ function formatDate(date: string) {
   });
 }
 
-function PostCard({ post, onPostUpdated, onPostDeleted }: PostCardProps) {
+function PostCard({
+  post,
+  highlight = false,
+  onPostUpdated,
+  onPostDeleted,
+}: PostCardProps) {
   const navigate = useNavigate();
 
   const [comments, setComments] = useState<Comment[]>(post.comments || []);
@@ -125,9 +129,7 @@ function PostCard({ post, onPostUpdated, onPostDeleted }: PostCardProps) {
       setActionMessage('Comentario publicado.');
     } catch (err) {
       setCommentError(
-        err instanceof Error
-          ? err.message
-          : 'No se pudo crear el comentario',
+        err instanceof Error ? err.message : 'No se pudo crear el comentario',
       );
     } finally {
       setCreatingComment(false);
@@ -153,7 +155,7 @@ function PostCard({ post, onPostUpdated, onPostDeleted }: PostCardProps) {
       setBusyAction('save');
       const updatedPost = saved ? await unsavePost(post.id) : await savePost(post.id);
       applyUpdatedPost(updatedPost);
-      setActionMessage(saved ? 'Se quitó de guardados.' : 'Se guardó la publicación.');
+      setActionMessage(saved ? 'Se quito de guardados.' : 'Se guardo la publicacion.');
     } catch (err) {
       setActionMessage(
         err instanceof Error ? err.message : 'No se pudo actualizar guardados.',
@@ -165,7 +167,7 @@ function PostCard({ post, onPostUpdated, onPostDeleted }: PostCardProps) {
 
   const handleDelete = async () => {
     const confirmed = window.confirm(
-      'Esta publicación se ocultará del feed. ¿Deseas continuar?',
+      'Esta publicacion se ocultara del feed. Deseas continuar?',
     );
 
     if (!confirmed) {
@@ -178,7 +180,9 @@ function PostCard({ post, onPostUpdated, onPostDeleted }: PostCardProps) {
       onPostDeleted?.(post.id);
     } catch (err) {
       setActionMessage(
-        err instanceof Error ? err.message : 'No se pudo eliminar la publicación.',
+        err instanceof Error
+          ? err.message
+          : 'No se pudo eliminar la publicacion.',
       );
     } finally {
       setBusyAction('');
@@ -192,7 +196,7 @@ function PostCard({ post, onPostUpdated, onPostDeleted }: PostCardProps) {
       await navigator.clipboard.writeText(url);
       setActionMessage('Enlace copiado al portapapeles.');
     } catch {
-      setActionMessage('No se pudo copiar el enlace, pero la acción ya existe.');
+      setActionMessage('No se pudo copiar el enlace.');
     }
   };
 
@@ -208,14 +212,27 @@ function PostCard({ post, onPostUpdated, onPostDeleted }: PostCardProps) {
         {isVideo ? (
           <video src={post.mediaUrl} className="post-media" controls />
         ) : (
-          <img src={post.mediaUrl} alt="Publicacion" className="post-media" />
+          <FallbackImage
+            src={post.mediaUrl}
+            alt="Publicacion"
+            className="post-media"
+            fallback={
+              <div className="post-media-fallback">
+                <strong>Imagen no disponible</strong>
+                <span>El archivo ya no existe o la URL no responde.</span>
+              </div>
+            }
+          />
         )}
       </div>
     );
   };
 
   return (
-    <article className="post-card">
+    <article
+      id={`post-${post.id}`}
+      className={highlight ? 'post-card post-card-highlight' : 'post-card'}
+    >
       <div className="post-header">
         <button
           type="button"
@@ -274,11 +291,13 @@ function PostCard({ post, onPostUpdated, onPostDeleted }: PostCardProps) {
         </div>
       </div>
 
+      {highlight && <div className="post-highlight-chip">Publicacion destacada</div>}
+
       <p className="post-content">{post.content}</p>
       {renderMedia()}
 
       <div className="post-stats">
-        <span>{likesCount > 0 ? `${likesCount} reacciones` : 'Sin reacciones aún'}</span>
+        <span>{likesCount > 0 ? `${likesCount} reacciones` : 'Sin reacciones aun'}</span>
         <span>{commentsCount} comentarios</span>
       </div>
 
@@ -330,10 +349,7 @@ function PostCard({ post, onPostUpdated, onPostDeleted }: PostCardProps) {
             <CommentList comments={comments} />
           )}
 
-          <CommentInput
-            onAddComment={handleAddComment}
-            disabled={creatingComment}
-          />
+          <CommentInput onAddComment={handleAddComment} disabled={creatingComment} />
         </div>
       )}
     </article>

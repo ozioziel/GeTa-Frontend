@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { getCurrentUser } from '../../services/authService';
+import FallbackImage from '../common/FallbackImage';
 import { PlusSquareIcon } from '../icons/AppIcons';
 import '../../styles/home/CreatePostCard.css';
 
@@ -98,7 +99,15 @@ function CreatePostCard({
                   {mediaUrl.match(/\.(mp4|webm|ogg)$/i) ? (
                     <video src={mediaUrl} controls />
                   ) : (
-                    <img src={mediaUrl} alt="Vista previa" />
+                    <FallbackImage
+                      src={mediaUrl}
+                      alt="Vista previa"
+                      fallback={
+                        <div className="create-post-media-fallback">
+                          No se pudo cargar la vista previa.
+                        </div>
+                      }
+                    />
                   )}
                 </div>
               )}

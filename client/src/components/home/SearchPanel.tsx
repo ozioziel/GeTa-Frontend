@@ -92,6 +92,11 @@ function SearchPanel({ initialQuery = '' }: SearchPanelProps) {
     );
   };
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    navigate(`/home?view=search&q=${encodeURIComponent(query.trim())}`);
+  };
+
   return (
     <section className="dashboard-panel-stack">
       <div className="dashboard-card">
@@ -102,13 +107,7 @@ function SearchPanel({ initialQuery = '' }: SearchPanelProps) {
           </div>
         </div>
 
-        <form
-          className="dashboard-search-form"
-          onSubmit={(event) => {
-            event.preventDefault();
-            runSearch(query);
-          }}
-        >
+        <form className="dashboard-search-form" onSubmit={handleSubmit}>
           <input
             type="text"
             value={query}
@@ -132,7 +131,9 @@ function SearchPanel({ initialQuery = '' }: SearchPanelProps) {
               </div>
 
               {results.users.length === 0 ? (
-                <div className="dashboard-empty">No se encontraron estudiantes para esa búsqueda.</div>
+                <div className="dashboard-empty">
+                  No se encontraron estudiantes para esa busqueda.
+                </div>
               ) : (
                 <div className="dashboard-user-list">
                   {results.users.map((user) => (
@@ -152,9 +153,7 @@ function SearchPanel({ initialQuery = '' }: SearchPanelProps) {
                         </button>
                         <button
                           type="button"
-                          onClick={() =>
-                            navigate(`/home?view=messages&userId=${user.id}`)
-                          }
+                          onClick={() => navigate(`/home?view=messages&userId=${user.id}`)}
                         >
                           Mensaje
                         </button>
@@ -176,12 +175,14 @@ function SearchPanel({ initialQuery = '' }: SearchPanelProps) {
               <div className="dashboard-card-header">
                 <div>
                   <p className="dashboard-eyebrow">Carreras</p>
-                  <h3>Coincidencias académicas</h3>
+                  <h3>Coincidencias academicas</h3>
                 </div>
               </div>
 
               {results.careers.length === 0 ? (
-                <div className="dashboard-empty">No hay carreras relacionadas con ese término.</div>
+                <div className="dashboard-empty">
+                  No hay carreras relacionadas con ese termino.
+                </div>
               ) : (
                 <div className="dashboard-chip-grid">
                   {results.careers.map((career) => (
@@ -206,12 +207,12 @@ function SearchPanel({ initialQuery = '' }: SearchPanelProps) {
             <div className="dashboard-card-header">
               <div>
                 <p className="dashboard-eyebrow">Publicaciones</p>
-                <h3>Lo que se está hablando ahora</h3>
+                <h3>Lo que se esta hablando ahora</h3>
               </div>
             </div>
 
             {results.posts.length === 0 ? (
-              <div className="dashboard-empty">No hay publicaciones que coincidan todavía.</div>
+              <div className="dashboard-empty">No hay publicaciones que coincidan todavia.</div>
             ) : (
               <div className="feed-posts">
                 {results.posts.map((post) => (

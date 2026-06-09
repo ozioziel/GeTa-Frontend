@@ -151,6 +151,12 @@ export async function getSavedPosts(): Promise<Post[]> {
   return posts.map(normalizePost);
 }
 
+export async function getPostById(postId: string): Promise<Post> {
+  const data = await requestJson<any>(`/posts/${postId}`);
+  const rawPost = data.data || data.post || data;
+  return normalizePost(rawPost);
+}
+
 export async function createPost(
   content: string,
   mediaUrl?: string,

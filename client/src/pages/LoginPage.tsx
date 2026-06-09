@@ -1,11 +1,9 @@
 import { useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-
-import { API_URL } from '../config/api';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../styles/LoginPage.css';
 import FormCard from '../components/FormCard';
-import { fetchCurrentUser } from '../services/authService';
+import { establishSession, loginRequest } from '../services/authService';
 
 type LoginFormData = {
   email: string;
@@ -14,15 +12,19 @@ type LoginFormData = {
 
 function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const VIDEO_URL =
+  const redirectTarget = location.state?.from
+    ? `${location.state.from.pathname || '/home'}${location.state.from.search || ''}`
+    : '/home';
+
+  const videoUrl =
     'https://res.cloudinary.com/dj5kb9v78/video/upload/v1771434311/assets/intro_tu8teq.mp4';
 
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
     password: '',
   });
-
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -53,52 +55,18 @@ function LoginPage() {
     }
 
     if (!password.trim()) {
-      setError('Debes ingresar tu contraseña');
+      setError('Debes ingresar tu contrasena');
       return;
     }
 
     try {
       setLoading(true);
-
-      const response = await fetch(`${API_URL}/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
-
-      const data = await response.json().catch(() => ({}));
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Correo o contraseña incorrectos');
-      }
-
-      const token = data.accessToken || data.token;
-
-      if (!token) {
-        throw new Error('El backend no devolvió un token de acceso');
-      }
-
-      localStorage.setItem('accessToken', token);
-
-      try {
-        await fetchCurrentUser();
-      } catch {
-        if (data.user) {
-          localStorage.setItem('user', JSON.stringify(data.user));
-        }
-      }
-
-      navigate('/home', { replace: true });
+      const authPayload = await loginRequest({ email, password });
+      await establishSession(authPayload);
+      navigate(redirectTarget, { replace: true });
     } catch (err) {
       setError(
-        err instanceof Error
-          ? err.message
-          : 'Ocurrió un error al iniciar sesión'
+        err instanceof Error ? err.message : 'Ocurrio un error al iniciar sesion',
       );
     } finally {
       setLoading(false);
@@ -108,7 +76,7 @@ function LoginPage() {
   return (
     <main className="login-page">
       <video className="background-video" autoPlay muted loop playsInline>
-        <source src={VIDEO_URL} type="video/mp4" />
+        <source src={videoUrl} type="video/mp4" />
       </video>
 
       <div className="login-overlay"></div>
@@ -117,7 +85,7 @@ function LoginPage() {
         <div className="login-header">
           <p className="login-brand">GETA - UCB</p>
           <h1 className="login-title">GeTa</h1>
-          <p className="login-subtitle">Comparte, Opina y Diviértete</p>
+          <p className="login-subtitle">Comparte, opina y conectate con tu comunidad</p>
         </div>
 
         <form className="login-form" onSubmit={handleSubmit}>
@@ -132,7 +100,7 @@ function LoginPage() {
               disabled={loading}
             />
 
-            <label htmlFor="password">Contraseña</label>
+            <label htmlFor="password">Contrasena</label>
             <input
               type="password"
               id="password"
@@ -146,15 +114,15 @@ function LoginPage() {
           {error && <p className="login-error">{error}</p>}
 
           <button type="submit" className="login-button" disabled={loading}>
-            <span>{loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}</span>
-            <span className="button-arrow">→</span>
+            <span>{loading ? 'Iniciando sesion...' : 'Iniciar sesion'}</span>
+            <span className="button-arrow">{'->'}</span>
           </button>
         </form>
 
         <div className="login-NoAccount">
           <p className="register-text">
-            ¿No tienes cuenta?
-            <Link to="/register"> Regístrate Aquí</Link>
+            No tienes cuenta?
+            <Link to="/register"> Registrate aqui</Link>
           </p>
         </div>
       </FormCard>

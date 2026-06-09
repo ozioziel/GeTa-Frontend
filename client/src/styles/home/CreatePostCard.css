@@ -82,6 +82,18 @@
   object-fit: cover;
 }
 
+.home-page .create-post-media-fallback {
+  min-height: 180px;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.74);
+  background:
+    radial-gradient(circle at top, rgba(255, 209, 0, 0.18), transparent 34%),
+    linear-gradient(135deg, rgba(8, 12, 20, 0.94), rgba(17, 27, 44, 0.94));
+}
+
 .home-page .create-post-error,
 .home-page .create-post-note {
   margin: 14px 0 0 66px;

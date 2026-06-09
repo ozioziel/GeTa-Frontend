@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-
+import { useSearchParams } from 'react-router-dom';
 import HomeTopbar from '../components/home/HomeTopbar';
 import HomeSidebar from '../components/home/HomeSidebar';
 import Feed from '../components/home/Feed';
@@ -8,10 +7,9 @@ import SearchPanel from '../components/home/SearchPanel';
 import NotificationsPanel from '../components/home/NotificationsPanel';
 import MessagesPanel from '../components/home/MessagesPanel';
 import ExplorePanel from '../components/home/ExplorePanel';
-
-import { getCurrentCareerId, isAuthenticated } from '../services/authService';
+import DashboardOverviewPanel from '../components/home/DashboardOverviewPanel';
+import { getCurrentCareerId } from '../services/authService';
 import type { DashboardView } from '../types/dashboard.types';
-
 import '../styles/HomePage.css';
 import '../styles/home/DashboardPanels.css';
 
@@ -35,7 +33,6 @@ function getActiveView(rawView: string | null): DashboardView {
 }
 
 function HomePage() {
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [careerId, setCareerId] = useState('');
   const [careerError, setCareerError] = useState('');
@@ -46,12 +43,9 @@ function HomePage() {
   const composer = searchParams.get('composer') === '1';
   const selectedUserId = searchParams.get('userId') || '';
   const selectedCareerId = searchParams.get('careerId') || '';
-
-  useEffect(() => {
-    if (!isAuthenticated()) {
-      navigate('/login', { replace: true });
-    }
-  }, [navigate]);
+  const featuredPostId = searchParams.get('postId') || '';
+  const showOverview =
+    activeView !== 'messages' && activeView !== 'notifications';
 
   useEffect(() => {
     if (activeView !== 'career') {
@@ -95,16 +89,17 @@ function HomePage() {
     switch (activeView) {
       case 'career':
         if (careerLoading || !careerId) {
-          return <div className="dashboard-empty">Cargando tu comunidad académica...</div>;
+          return <div className="dashboard-empty">Cargando tu comunidad academica...</div>;
         }
         return (
           <Feed
-            title="Tu comunidad académica"
+            title="Tu comunidad academica"
             subtitle="Publicaciones filtradas por la carrera del usuario autenticado."
-            emptyMessage="Aun no hay publicaciones en esta carrera. Puedes abrir la conversación con la primera."
+            emptyMessage="Aun no hay publicaciones en esta carrera. Puedes abrir la conversacion con la primera."
             mode="career"
             careerId={careerId}
             showComposer
+            featuredPostId={featuredPostId}
           />
         );
       case 'explore':
@@ -119,6 +114,7 @@ function HomePage() {
             emptyMessage="Todavia no guardaste publicaciones."
             mode="saved"
             showComposer={false}
+            featuredPostId={featuredPostId}
           />
         );
       case 'notifications':
@@ -135,6 +131,7 @@ function HomePage() {
             mode="all"
             showComposer
             focusComposer={composer}
+            featuredPostId={featuredPostId}
           />
         );
     }
@@ -148,7 +145,15 @@ function HomePage() {
       <HomeTopbar activeView={activeView} />
       <HomeSidebar activeView={activeView} />
 
-      <div className="home-layout">{renderView()}</div>
+      <div className={showOverview ? 'home-layout home-layout-with-side' : 'home-layout'}>
+        <div className="home-main-column">{renderView()}</div>
+
+        {showOverview && (
+          <div className="home-side-column">
+            <DashboardOverviewPanel activeView={activeView} />
+          </div>
+        )}
+      </div>
     </main>
   );
 }

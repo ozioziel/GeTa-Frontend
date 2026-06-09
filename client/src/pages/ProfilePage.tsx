@@ -4,10 +4,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import HomeTopbar from '../components/home/HomeTopbar';
 import HomeSidebar from '../components/home/HomeSidebar';
 import Feed from '../components/home/Feed';
+import FallbackImage from '../components/common/FallbackImage';
 
 import {
   getCurrentUser,
-  isAuthenticated,
 } from '../services/authService';
 import {
   followUser,
@@ -52,11 +52,6 @@ function ProfilePage() {
   const [successMessage, setSuccessMessage] = useState<string>('');
 
   useEffect(() => {
-    if (!isAuthenticated()) {
-      navigate('/login', { replace: true });
-      return;
-    }
-
     const loadProfile = async () => {
       try {
         setLoading(true);
@@ -218,7 +213,11 @@ function ProfilePage() {
           <div className="profile-header-content">
             <div className="profile-avatar-large">
               {formData.avatarUrl ? (
-                <img src={formData.avatarUrl} alt="Avatar del usuario" />
+                <FallbackImage
+                  src={formData.avatarUrl}
+                  alt="Avatar del usuario"
+                  fallback={<span>{avatarLetter}</span>}
+                />
               ) : (
                 <span>{avatarLetter}</span>
               )}

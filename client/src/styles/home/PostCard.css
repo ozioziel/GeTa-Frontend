@@ -8,6 +8,13 @@
   box-shadow: 0 22px 52px rgba(0, 0, 0, 0.28);
 }
 
+.home-page .post-card-highlight {
+  border-color: rgba(255, 209, 0, 0.45);
+  box-shadow:
+    0 0 0 1px rgba(255, 209, 0, 0.18),
+    0 24px 60px rgba(0, 0, 0, 0.32);
+}
+
 .home-page .post-header {
   display: flex;
   align-items: center;
@@ -100,6 +107,19 @@
   gap: 8px;
 }
 
+.home-page .post-highlight-chip {
+  display: inline-flex;
+  margin-top: 16px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 209, 0, 0.14);
+  color: #ffd100;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
 .home-page .post-content {
   margin: 20px 0;
   color: rgba(255, 255, 255, 0.88);
@@ -121,6 +141,29 @@
   width: 100%;
   max-height: 620px;
   object-fit: cover;
+}
+
+.home-page .post-media-fallback {
+  min-height: 260px;
+  display: grid;
+  place-items: center;
+  gap: 8px;
+  padding: 28px;
+  text-align: center;
+  background:
+    radial-gradient(circle at top, rgba(255, 209, 0, 0.18), transparent 36%),
+    linear-gradient(135deg, rgba(8, 12, 20, 0.94), rgba(17, 27, 44, 0.94));
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.home-page .post-media-fallback strong {
+  font-size: 20px;
+  color: #ffd100;
+}
+
+.home-page .post-media-fallback span {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.62);
 }
 
 .home-page .post-stats {
@@ -287,4 +330,15 @@
   color: #050505;
   cursor: pointer;
   font-weight: 900;
+}
+
+@media (max-width: 620px) {
+  .home-page .post-card {
+    padding: 18px;
+    border-radius: 24px;
+  }
+
+  .home-page .post-actions {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

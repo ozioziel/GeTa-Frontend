@@ -46,6 +46,16 @@
   gap: 22px;
 }
 
+.home-page .feed-context-banner {
+  padding: 16px 18px;
+  border-radius: 22px;
+  background: rgba(255, 209, 0, 0.12);
+  border: 1px solid rgba(255, 209, 0, 0.22);
+  color: rgba(255, 245, 204, 0.92);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
 .home-page .feed-state {
   padding: 28px;
   border-radius: 26px;

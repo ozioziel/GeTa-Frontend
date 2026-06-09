@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react';
 import CreatePostCard from './CreatePostCard';
 import PostCard from './PostCard';
-import { createPost, getPosts, getSavedPosts } from '../../services/postService';
+import {
+  createPost,
+  getPostById,
+  getPosts,
+  getSavedPosts,
+} from '../../services/postService';
 import type { Post } from '../../types/post.types';
 import '../../styles/home/Feed.css';
 
@@ -16,6 +21,7 @@ type FeedProps = {
   authorId?: string;
   showComposer?: boolean;
   focusComposer?: boolean;
+  featuredPostId?: string;
 };
 
 function Feed({
@@ -27,6 +33,7 @@ function Feed({
   authorId,
   showComposer = true,
   focusComposer = false,
+  featuredPostId = '',
 }: FeedProps) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loadingPosts, setLoadingPosts] = useState<boolean>(true);
@@ -49,7 +56,21 @@ function Feed({
         });
       }
 
-      setPosts(postsFromApi);
+      let nextPosts = postsFromApi;
+
+      if (
+        featuredPostId &&
+        !postsFromApi.some((post) => post.id === featuredPostId)
+      ) {
+        try {
+          const featuredPost = await getPostById(featuredPostId);
+          nextPosts = [featuredPost, ...postsFromApi];
+        } catch {
+          nextPosts = postsFromApi;
+        }
+      }
+
+      setPosts(nextPosts);
     } catch (err) {
       setError(
         err instanceof Error
@@ -63,7 +84,27 @@ function Feed({
 
   useEffect(() => {
     loadPosts();
-  }, [mode, careerId, authorId]);
+  }, [mode, careerId, authorId, featuredPostId]);
+
+  useEffect(() => {
+    if (loadingPosts || !featuredPostId) {
+      return;
+    }
+
+    const target = posts.find((post) => post.id === featuredPostId);
+
+    if (!target) {
+      return;
+    }
+
+    const frameId = window.requestAnimationFrame(() => {
+      document
+        .getElementById(`post-${featuredPostId}`)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    return () => window.cancelAnimationFrame(frameId);
+  }, [featuredPostId, loadingPosts, posts]);
 
   const handleCreatePost = async (content: string, mediaUrl?: string) => {
     try {
@@ -103,6 +144,12 @@ function Feed({
         <p>{subtitle}</p>
       </div>
 
+      {featuredPostId && (
+        <div className="feed-context-banner">
+          Mostrando una publicacion enlazada para que puedas verla mas rapido.
+        </div>
+      )}
+
       {showComposer && (
         <CreatePostCard
           onCreatePost={handleCreatePost}
@@ -131,6 +178,7 @@ function Feed({
             <PostCard
               key={post.id}
               post={post}
+              highlight={post.id === featuredPostId}
               onPostUpdated={handlePostUpdated}
               onPostDeleted={handlePostDeleted}
             />

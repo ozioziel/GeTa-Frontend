@@ -1,0 +1,231 @@
+.dashboard-overview-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.dashboard-overview-hero,
+.dashboard-overview-card,
+.dashboard-metric-card {
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 22px 52px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(16px);
+}
+
+.dashboard-overview-hero {
+  padding: 22px;
+  background:
+    radial-gradient(circle at top left, rgba(255, 209, 0, 0.2), transparent 35%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.06));
+}
+
+.dashboard-overview-hero h2,
+.dashboard-overview-card h3 {
+  margin: 0;
+  color: white;
+}
+
+.dashboard-overview-hero p,
+.dashboard-overview-card p {
+  margin: 10px 0 0;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+}
+
+.dashboard-overview-progress {
+  margin-top: 18px;
+}
+
+.dashboard-overview-progress-copy {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.dashboard-overview-progress-copy span {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.dashboard-overview-progress-copy strong {
+  color: white;
+  font-size: 15px;
+}
+
+.dashboard-overview-progress-track {
+  overflow: hidden;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dashboard-overview-progress-value {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #ffd100, #ffef9a, #4f8cff);
+}
+
+.dashboard-overview-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.dashboard-overview-meta span,
+.dashboard-overview-badge {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.09);
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.dashboard-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.dashboard-metric-card {
+  padding: 18px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dashboard-metric-card span,
+.dashboard-community-grid span {
+  display: block;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.dashboard-metric-card strong,
+.dashboard-community-grid strong {
+  display: block;
+  margin-top: 10px;
+  color: white;
+  font-size: 28px;
+  line-height: 1;
+}
+
+.dashboard-metric-card small {
+  display: block;
+  margin-top: 10px;
+  color: rgba(255, 255, 255, 0.68);
+  line-height: 1.5;
+}
+
+.dashboard-overview-card {
+  padding: 22px;
+}
+
+.dashboard-overview-card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+
+.dashboard-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dashboard-checklist-item {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dashboard-checklist-item strong {
+  color: white;
+}
+
+.dashboard-checklist-item p {
+  margin: 6px 0 0;
+}
+
+.dashboard-checklist-item.completed {
+  border-color: rgba(255, 209, 0, 0.22);
+  background: rgba(255, 209, 0, 0.08);
+}
+
+.dashboard-checklist-marker {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ffd100, #fff1a8);
+  color: #050505;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.dashboard-overview-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.dashboard-overview-actions button,
+.dashboard-overview-card button {
+  height: 42px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.dashboard-community-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.dashboard-community-grid div {
+  padding: 16px;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@media (max-width: 860px) {
+  .dashboard-overview-grid,
+  .dashboard-community-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .dashboard-overview-grid,
+  .dashboard-community-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-overview-card,
+  .dashboard-overview-hero {
+    padding: 18px;
+    border-radius: 24px;
+  }
+}

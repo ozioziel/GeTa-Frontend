@@ -1,18 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { API_URL } from '../config/api';
+import { establishSession, registerRequest } from '../services/authService';
+import { getCareers } from '../services/careerService';
+import type { Career } from '../types/career.types';
 import '../styles/CareerSelectionPage.css';
 
 type RegisterData = {
   fullName: string;
   email: string;
   password: string;
-};
-
-type Career = {
-  id: string;
-  name: string;
-  code?: string;
 };
 
 const careerVisuals: Record<
@@ -24,72 +20,72 @@ const careerVisuals: Record<
     className: string;
   }
 > = {
-  'Ingeniería de Sistemas': {
+  'ingenieria de sistemas': {
     short: 'IS',
-    description: 'Tecnología, software y soluciones digitales.',
+    description: 'Tecnologia, software y soluciones digitales.',
     image:
       'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80',
     className: 'career-sistemas',
   },
-  'Ingeniería Civil': {
+  'ingenieria civil': {
     short: 'IC',
-    description: 'Construcción, infraestructura y diseño estructural.',
+    description: 'Construccion, infraestructura y diseno estructural.',
     image:
       'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1600&q=80',
     className: 'career-civil',
   },
-  'Ingeniería Industrial': {
+  'ingenieria industrial': {
     short: 'II',
-    description: 'Procesos, producción y optimización empresarial.',
+    description: 'Procesos, produccion y optimizacion empresarial.',
     image:
       'https://images.unsplash.com/photo-1565106430482-8f6e74349ca1?auto=format&fit=crop&w=1600&q=80',
     className: 'career-industrial',
   },
-  'Administración de Empresas': {
+  'administracion de empresas': {
     short: 'AE',
-    description: 'Gestión, liderazgo y negocios.',
+    description: 'Gestion, liderazgo y negocios.',
     image:
       'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1600&q=80',
     className: 'career-admin',
   },
-  'Contaduría Pública': {
+  'contaduria publica': {
     short: 'CP',
-    description: 'Finanzas, auditoría y control contable.',
+    description: 'Finanzas, auditoria y control contable.',
     image:
       'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1600&q=80',
     className: 'career-contaduria',
   },
-  Derecho: {
+  derecho: {
     short: 'DR',
     description: 'Leyes, justicia y sociedad.',
     image:
       'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1600&q=80',
     className: 'career-derecho',
   },
-  Psicología: {
+  psicologia: {
     short: 'PS',
     description: 'Comportamiento humano, mente y bienestar.',
     image:
       'https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=1600&q=80',
     className: 'career-psicologia',
   },
-  Medicina: {
+  medicina: {
     short: 'MD',
     description: 'Salud, ciencia y cuidado humano.',
     image:
       'https://images.unsplash.com/photo-1530026405186-ed1f139313f3?auto=format&fit=crop&w=1600&q=80',
     className: 'career-medicina',
   },
-  Arquitectura: {
+  arquitectura: {
     short: 'AR',
-    description: 'Diseño, espacios y creatividad urbana.',
+    description: 'Diseno, espacios y creatividad urbana.',
     image:
       'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1600&q=80',
     className: 'career-arquitectura',
   },
-  'Comunicación Social': {
+  'comunicacion social': {
     short: 'CS',
-    description: 'Medios, información y expresión social.',
+    description: 'Medios, informacion y expresion social.',
     image:
       'https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=1600&q=80',
     className: 'career-comunicacion',
@@ -104,13 +100,24 @@ const defaultVisual = {
   className: 'career-default',
 };
 
+function normalizeCareerKey(value: string) {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
 function getCareerVisual(career: Career | null | undefined) {
-  if (!career) return defaultVisual;
+  if (!career) {
+    return defaultVisual;
+  }
+
+  const key = normalizeCareerKey(career.name);
 
   return (
-    careerVisuals[career.name] || {
+    careerVisuals[key] || {
       short: career.code || career.name.slice(0, 2).toUpperCase(),
-      description: 'Carrera de la Universidad Católica Boliviana.',
+      description: 'Carrera de la Universidad Catolica Boliviana.',
       image:
         'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1600&q=80',
       className: 'career-default',
@@ -141,42 +148,13 @@ function CareerSelectionPage() {
       try {
         setLoadingCareers(true);
         setError('');
-
-        const response = await fetch(`${API_URL}/careers`);
-
-        if (!response.ok) {
-          throw new Error('No se pudieron cargar las carreras');
-        }
-
-        const data = await response.json();
-
-        const careerList = Array.isArray(data)
-          ? data
-          : Array.isArray(data.data)
-          ? data.data
-          : Array.isArray(data.careers)
-          ? data.careers
-          : [];
-
-        const normalizedCareers: Career[] = careerList
-          .map((career: any) => ({
-            id: career.id || career.careerId || career.CareerID || '',
-            name:
-              career.name ||
-              career.careerName ||
-              career.CareerName ||
-              career.nombre ||
-              '',
-            code: career.code || career.Code || '',
-          }))
-          .filter((career: Career) => career.id && career.name);
-
-        setCareers(normalizedCareers);
+        const careerList = await getCareers();
+        setCareers(careerList);
       } catch (err) {
         setError(
           err instanceof Error
             ? err.message
-            : 'Ocurrió un error al cargar las carreras'
+            : 'Ocurrio un error al cargar las carreras',
         );
       } finally {
         setLoadingCareers(false);
@@ -198,45 +176,28 @@ function CareerSelectionPage() {
   const activeVisual = getCareerVisual(activeCareer);
 
   const handleRegister = async () => {
-    if (!registerData || !selectedCareerId || registering) return;
+    if (!registerData || !selectedCareerId || registering) {
+      return;
+    }
 
     try {
       setRegistering(true);
       setError('');
 
-      const response = await fetch(`${API_URL}/auth/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          fullName: registerData.fullName,
-          email: registerData.email,
-          password: registerData.password,
-          careerId: selectedCareerId,
-        }),
+      const authPayload = await registerRequest({
+        fullName: registerData.fullName,
+        email: registerData.email,
+        password: registerData.password,
+        careerId: selectedCareerId,
       });
 
-      const data = await response.json().catch(() => ({}));
-
-      if (!response.ok) {
-        throw new Error(data.message || 'No se pudo registrar la cuenta');
-      }
-
-      if (data.accessToken) {
-        localStorage.setItem('accessToken', data.accessToken);
-      }
-
-      if (data.token) {
-        localStorage.setItem('accessToken', data.token);
-      }
-
-      navigate('/login', { replace: true });
+      await establishSession(authPayload);
+      navigate('/home', { replace: true });
     } catch (err) {
       setError(
         err instanceof Error
           ? err.message
-          : 'Ocurrió un error al registrar la cuenta'
+          : 'Ocurrio un error al registrar la cuenta',
       );
     } finally {
       setRegistering(false);
@@ -264,9 +225,7 @@ function CareerSelectionPage() {
             {activeCareer ? activeCareer.name : 'Elige tu carrera'}
           </h1>
 
-          <p className="career-subtitle">
-            {activeVisual.description}
-          </p>
+          <p className="career-subtitle">{activeVisual.description}</p>
         </div>
 
         {error && <p className="career-error">{error}</p>}
@@ -325,7 +284,7 @@ function CareerSelectionPage() {
               onClick={handleRegister}
               disabled={!selectedCareerId || registering}
             >
-              {registering ? 'Registrando...' : 'Continuar'}
+              {registering ? 'Creando tu acceso...' : 'Entrar a GeTa'}
             </button>
           </>
         )}
@@ -336,7 +295,7 @@ function CareerSelectionPage() {
           onClick={() => navigate('/register')}
           disabled={registering}
         >
-          ← Volver al registro
+          {'<-'} Volver al registro
         </button>
       </section>
     </main>
