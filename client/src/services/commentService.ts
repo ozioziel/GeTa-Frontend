@@ -1,6 +1,14 @@
 import { getCurrentUser, getToken } from './authService';
 import { requestJson } from './http';
 import type { Comment } from '../types/post.types';
+import { getCachedOrFetch, invalidateCache, invalidateCacheByPrefix } from './cache';
+
+const COMMENTS_POST_PREFIX = 'comments:post:';
+const SEARCH_RESULTS_PREFIX = 'search:results:';
+
+function buildCommentsCacheKey(postId: string) {
+  return `${COMMENTS_POST_PREFIX}${postId}`;
+}
 
 function getAuthHeaders(): Record<string, string> {
   const token = getToken();
@@ -63,13 +71,15 @@ function extractArrayResponse(data: any): any[] {
 }
 
 export async function getCommentsByPost(postId: string): Promise<Comment[]> {
-  const data = await requestJson<any>(`/comments/post/${postId}`, {
-    headers: getAuthHeaders(),
+  return getCachedOrFetch(buildCommentsCacheKey(postId), async () => {
+    const data = await requestJson<any>(`/comments/post/${postId}`, {
+      headers: getAuthHeaders(),
+    });
+
+    const comments = extractArrayResponse(data);
+
+    return comments.map(normalizeComment);
   });
-
-  const comments = extractArrayResponse(data);
-
-  return comments.map(normalizeComment);
 }
 
 export async function createComment(
@@ -86,6 +96,12 @@ export async function createComment(
   });
 
   const rawComment = data.data || data.comment || data;
+  const normalizedComment = normalizeComment(rawComment);
 
-  return normalizeComment(rawComment);
+  invalidateCache(buildCommentsCacheKey(postId));
+  invalidateCacheByPrefix('posts:list:');
+  invalidateCache(`posts:single:${postId}`);
+  invalidateCacheByPrefix(SEARCH_RESULTS_PREFIX);
+
+  return normalizedComment;
 }

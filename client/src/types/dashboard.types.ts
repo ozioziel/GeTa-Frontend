@@ -10,13 +10,6 @@ export type DashboardView =
   | 'messages'
   | 'profile';
 
-export type DashboardChecklistItem = {
-  id: string;
-  title: string;
-  description: string;
-  completed: boolean;
-};
-
 export type DashboardOverview = {
   profile: {
     fullName: string;
@@ -34,7 +27,6 @@ export type DashboardOverview = {
     following: number;
     pendingItems: number;
   };
-  checklist: DashboardChecklistItem[];
   highlight: {
     profileCompletion: number;
     engagementScore: number;

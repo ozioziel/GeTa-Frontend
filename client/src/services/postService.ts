@@ -1,6 +1,34 @@
 import { getCurrentCareerId, getCurrentUser } from './authService';
 import { requestJson } from './http';
 import type { Post, Comment } from '../types/post.types';
+import {
+  getCachedOrFetch,
+  invalidateCache,
+  invalidateCacheByPrefix,
+  writeCachedValue,
+} from './cache';
+import { invalidateDashboardOverviewCache } from './dashboardService';
+
+const POSTS_LIST_PREFIX = 'posts:list:';
+const SAVED_POSTS_CACHE_KEY = 'posts:saved';
+const POST_SINGLE_PREFIX = 'posts:single:';
+const SEARCH_RESULTS_PREFIX = 'search:results:';
+
+function buildPostsCacheKey(params: GetPostsParams = {}) {
+  const careerId = params.careerId || 'all';
+  const authorId = params.authorId || 'all';
+  return `${POSTS_LIST_PREFIX}${careerId}:${authorId}`;
+}
+
+function buildPostCacheKey(postId: string) {
+  return `${POST_SINGLE_PREFIX}${postId}`;
+}
+
+function invalidatePostCollectionCaches() {
+  invalidateCacheByPrefix(POSTS_LIST_PREFIX);
+  invalidateCache(SAVED_POSTS_CACHE_KEY);
+  invalidateCacheByPrefix(SEARCH_RESULTS_PREFIX);
+}
 
 function getLocalUserFullName(rawPost?: any): string | null {
   const user = getCurrentUser();
@@ -127,34 +155,40 @@ export type GetPostsParams = {
 };
 
 export async function getPosts(params: GetPostsParams = {}): Promise<Post[]> {
-  const search = new URLSearchParams();
+  return getCachedOrFetch(buildPostsCacheKey(params), async () => {
+    const search = new URLSearchParams();
 
-  if (params.careerId) {
-    search.set('careerId', params.careerId);
-  }
+    if (params.careerId) {
+      search.set('careerId', params.careerId);
+    }
 
-  if (params.authorId) {
-    search.set('authorId', params.authorId);
-  }
+    if (params.authorId) {
+      search.set('authorId', params.authorId);
+    }
 
-  const data = await requestJson<any>(
-    `/posts${search.toString() ? `?${search.toString()}` : ''}`,
-  );
-  const posts = extractArrayResponse(data);
+    const data = await requestJson<any>(
+      `/posts${search.toString() ? `?${search.toString()}` : ''}`,
+    );
+    const posts = extractArrayResponse(data);
 
-  return posts.map(normalizePost);
+    return posts.map(normalizePost);
+  });
 }
 
 export async function getSavedPosts(): Promise<Post[]> {
-  const data = await requestJson<any>('/posts/saved/me');
-  const posts = extractArrayResponse(data);
-  return posts.map(normalizePost);
+  return getCachedOrFetch(SAVED_POSTS_CACHE_KEY, async () => {
+    const data = await requestJson<any>('/posts/saved/me');
+    const posts = extractArrayResponse(data);
+    return posts.map(normalizePost);
+  });
 }
 
 export async function getPostById(postId: string): Promise<Post> {
-  const data = await requestJson<any>(`/posts/${postId}`);
-  const rawPost = data.data || data.post || data;
-  return normalizePost(rawPost);
+  return getCachedOrFetch(buildPostCacheKey(postId), async () => {
+    const data = await requestJson<any>(`/posts/${postId}`);
+    const rawPost = data.data || data.post || data;
+    return normalizePost(rawPost);
+  });
 }
 
 export async function createPost(
@@ -175,8 +209,13 @@ export async function createPost(
   });
 
   const rawPost = data.data || data.post || data;
+  const normalizedPost = normalizePost(rawPost);
 
-  return normalizePost(rawPost);
+  writeCachedValue(buildPostCacheKey(normalizedPost.id), normalizedPost);
+  invalidatePostCollectionCaches();
+  invalidateDashboardOverviewCache();
+
+  return normalizedPost;
 }
 
 export async function likePost(postId: string): Promise<Post> {
@@ -184,7 +223,13 @@ export async function likePost(postId: string): Promise<Post> {
     method: 'POST',
   });
 
-  return normalizePost(data.post || data);
+  const normalizedPost = normalizePost(data.post || data);
+
+  writeCachedValue(buildPostCacheKey(postId), normalizedPost);
+  invalidateCacheByPrefix(POSTS_LIST_PREFIX);
+  invalidateCacheByPrefix(SEARCH_RESULTS_PREFIX);
+
+  return normalizedPost;
 }
 
 export async function unlikePost(postId: string): Promise<Post> {
@@ -192,7 +237,13 @@ export async function unlikePost(postId: string): Promise<Post> {
     method: 'DELETE',
   });
 
-  return normalizePost(data.post || data);
+  const normalizedPost = normalizePost(data.post || data);
+
+  writeCachedValue(buildPostCacheKey(postId), normalizedPost);
+  invalidateCacheByPrefix(POSTS_LIST_PREFIX);
+  invalidateCacheByPrefix(SEARCH_RESULTS_PREFIX);
+
+  return normalizedPost;
 }
 
 export async function savePost(postId: string): Promise<Post> {
@@ -200,7 +251,13 @@ export async function savePost(postId: string): Promise<Post> {
     method: 'POST',
   });
 
-  return normalizePost(data.post || data);
+  const normalizedPost = normalizePost(data.post || data);
+
+  writeCachedValue(buildPostCacheKey(postId), normalizedPost);
+  invalidatePostCollectionCaches();
+  invalidateDashboardOverviewCache();
+
+  return normalizedPost;
 }
 
 export async function unsavePost(postId: string): Promise<Post> {
@@ -208,11 +265,21 @@ export async function unsavePost(postId: string): Promise<Post> {
     method: 'DELETE',
   });
 
-  return normalizePost(data.post || data);
+  const normalizedPost = normalizePost(data.post || data);
+
+  writeCachedValue(buildPostCacheKey(postId), normalizedPost);
+  invalidatePostCollectionCaches();
+  invalidateDashboardOverviewCache();
+
+  return normalizedPost;
 }
 
 export async function deletePost(postId: string): Promise<void> {
   await requestJson(`/posts/${postId}`, {
     method: 'DELETE',
   });
+
+  invalidateCache(buildPostCacheKey(postId));
+  invalidatePostCollectionCaches();
+  invalidateDashboardOverviewCache();
 }

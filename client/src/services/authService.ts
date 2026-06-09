@@ -1,5 +1,6 @@
 import type { User } from '../types/auth.types';
 import { API_URL } from '../config/api';
+import { clearAppCache } from './cache';
 
 const TOKEN_KEY = 'accessToken';
 const USER_KEY = 'user';
@@ -106,6 +107,7 @@ export async function fetchCurrentUser(): Promise<User> {
 }
 
 export async function establishSession(payload: AuthPayload): Promise<User | null> {
+  clearAppCache();
   const token = extractAccessToken(payload);
   saveAccessToken(token);
 
@@ -157,4 +159,5 @@ export async function getCurrentCareerId(): Promise<string> {
 export function logout(): void {
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem(USER_KEY);
+  clearAppCache();
 }

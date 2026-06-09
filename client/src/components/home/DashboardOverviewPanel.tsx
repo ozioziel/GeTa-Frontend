@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { readCachedValue } from '../../services/cache';
 import { getDashboardOverview } from '../../services/dashboardService';
 import type {
   DashboardOverview,
@@ -19,16 +20,20 @@ type MetricCard = {
   href: string;
 };
 
+const DASHBOARD_OVERVIEW_CACHE_KEY = 'dashboard:overview';
+
 function DashboardOverviewPanel({ activeView }: DashboardOverviewPanelProps) {
   const navigate = useNavigate();
-  const [overview, setOverview] = useState<DashboardOverview | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [overview, setOverview] = useState<DashboardOverview | null>(() =>
+    readCachedValue<DashboardOverview>(DASHBOARD_OVERVIEW_CACHE_KEY),
+  );
+  const [loading, setLoading] = useState(!overview);
   const [error, setError] = useState('');
 
   useEffect(() => {
     const loadOverview = async () => {
       try {
-        setLoading(true);
+        setLoading((current) => current || !overview);
         setError('');
         const data = await getDashboardOverview();
         setOverview(data);
@@ -46,23 +51,27 @@ function DashboardOverviewPanel({ activeView }: DashboardOverviewPanelProps) {
     loadOverview();
   }, [activeView]);
 
-  if (loading) {
+  if (loading && !overview) {
     return <aside className="dashboard-overview-shell">Cargando resumen...</aside>;
   }
 
-  if (error || !overview) {
+  if (error && !overview) {
     return (
       <aside className="dashboard-overview-shell">
         <div className="dashboard-overview-card">
           <p className="dashboard-eyebrow">Resumen</p>
           <h3>No se pudo cargar tu panel</h3>
-          <p>{error || 'Intenta nuevamente en unos segundos.'}</p>
+          <p>{error}</p>
           <button type="button" onClick={() => window.location.reload()}>
             Reintentar
           </button>
         </div>
       </aside>
     );
+  }
+
+  if (!overview) {
+    return null;
   }
 
   const metricCards: MetricCard[] = [
@@ -139,49 +148,6 @@ function DashboardOverviewPanel({ activeView }: DashboardOverviewPanelProps) {
             <small>{card.helper}</small>
           </button>
         ))}
-      </section>
-
-      <section className="dashboard-overview-card">
-        <div className="dashboard-overview-card-header">
-          <div>
-            <p className="dashboard-eyebrow">Checklist</p>
-            <h3>Perfil y participacion</h3>
-          </div>
-          <span className="dashboard-overview-badge">
-            {overview.checklist.filter((item) => item.completed).length}/
-            {overview.checklist.length}
-          </span>
-        </div>
-
-        <div className="dashboard-checklist">
-          {overview.checklist.map((item) => (
-            <article
-              key={item.id}
-              className={
-                item.completed
-                  ? 'dashboard-checklist-item completed'
-                  : 'dashboard-checklist-item'
-              }
-            >
-              <div className="dashboard-checklist-marker">
-                {item.completed ? 'OK' : 'GO'}
-              </div>
-              <div>
-                <strong>{item.title}</strong>
-                <p>{item.description}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-
-        <div className="dashboard-overview-actions">
-          <button type="button" onClick={() => navigate('/profile')}>
-            Editar perfil
-          </button>
-          <button type="button" onClick={() => navigate('/home?view=feed&composer=1')}>
-            Nueva publicacion
-          </button>
-        </div>
       </section>
 
       <section className="dashboard-overview-card">

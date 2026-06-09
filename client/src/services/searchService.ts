@@ -1,22 +1,35 @@
 import { requestJson } from './http';
 import type { SearchResults } from '../types/social.types';
 import { normalizePost } from './postService';
+import { getCachedOrFetch, invalidateCacheByPrefix } from './cache';
+
+const SEARCH_RESULTS_PREFIX = 'search:results:';
+
+function buildSearchCacheKey(query: string) {
+  return `${SEARCH_RESULTS_PREFIX}${query.trim().toLowerCase() || 'all'}`;
+}
 
 export async function searchAll(query: string): Promise<SearchResults> {
-  const search = new URLSearchParams();
+  return getCachedOrFetch(buildSearchCacheKey(query), async () => {
+    const search = new URLSearchParams();
 
-  if (query.trim()) {
-    search.set('q', query.trim());
-  }
+    if (query.trim()) {
+      search.set('q', query.trim());
+    }
 
-  const data = await requestJson<any>(
-    `/search${search.toString() ? `?${search.toString()}` : ''}`,
-  );
+    const data = await requestJson<any>(
+      `/search${search.toString() ? `?${search.toString()}` : ''}`,
+    );
 
-  return {
-    query: data.query || '',
-    users: Array.isArray(data.users) ? data.users : [],
-    careers: Array.isArray(data.careers) ? data.careers : [],
-    posts: Array.isArray(data.posts) ? data.posts.map(normalizePost) : [],
-  };
+    return {
+      query: data.query || '',
+      users: Array.isArray(data.users) ? data.users : [],
+      careers: Array.isArray(data.careers) ? data.careers : [],
+      posts: Array.isArray(data.posts) ? data.posts.map(normalizePost) : [],
+    };
+  });
+}
+
+export function invalidateSearchCache() {
+  invalidateCacheByPrefix(SEARCH_RESULTS_PREFIX);
 }

@@ -1,5 +1,8 @@
 import { requestJson } from './http';
 import type { Career } from '../types/career.types';
+import { getCachedOrFetch } from './cache';
+
+const CAREERS_ALL_CACHE_KEY = 'careers:all';
 
 function normalizeCareer(rawCareer: any): Career {
   return {
@@ -10,7 +13,9 @@ function normalizeCareer(rawCareer: any): Career {
 }
 
 export async function getCareers(): Promise<Career[]> {
-  const data = await requestJson<any>('/careers');
-  const list = Array.isArray(data) ? data : data.data || [];
-  return list.map(normalizeCareer);
+  return getCachedOrFetch(CAREERS_ALL_CACHE_KEY, async () => {
+    const data = await requestJson<any>('/careers');
+    const list = Array.isArray(data) ? data : data.data || [];
+    return list.map(normalizeCareer);
+  });
 }

@@ -1,6 +1,21 @@
-import { fetchCurrentUser, getToken, saveCurrentUser } from './authService';
+import {
+  fetchCurrentUser,
+  getCurrentUser,
+  getToken,
+  saveCurrentUser,
+} from './authService';
 import { requestJson } from './http';
 import type { User } from '../types/auth.types';
+import { getCachedOrFetch, invalidateCacheByPrefix } from './cache';
+import { invalidateDashboardOverviewCache } from './dashboardService';
+import { invalidateAllFollowCaches } from './followService';
+
+const PROFILE_PUBLIC_PREFIX = 'profiles:public:';
+const SEARCH_RESULTS_PREFIX = 'search:results:';
+
+function buildPublicProfileCacheKey(userId: string) {
+  return `${PROFILE_PUBLIC_PREFIX}${userId}`;
+}
 
 function getAuthHeaders(): Record<string, string> {
   const token = getToken();
@@ -18,7 +33,7 @@ export type UpdateProfilePayload = {
 };
 
 export async function getMyProfile(): Promise<User> {
-  return fetchCurrentUser();
+  return getCurrentUser() || fetchCurrentUser();
 }
 
 export async function updateMyProfile(
@@ -32,9 +47,21 @@ export async function updateMyProfile(
 
   const currentUser = await fetchCurrentUser();
   saveCurrentUser(currentUser);
+
+  invalidateDashboardOverviewCache();
+  invalidateAllFollowCaches();
+  invalidateCacheByPrefix(SEARCH_RESULTS_PREFIX);
+  invalidateCacheByPrefix('posts:list:');
+  invalidateCacheByPrefix('posts:single:');
+  invalidateCacheByPrefix(PROFILE_PUBLIC_PREFIX);
+  invalidateCacheByPrefix('notifications:');
+  invalidateCacheByPrefix('messages:');
+
   return currentUser;
 }
 
 export async function getProfileByUserId(userId: string) {
-  return requestJson<any>(`/profiles/${userId}`);
+  return getCachedOrFetch(buildPublicProfileCacheKey(userId), () =>
+    requestJson<any>(`/profiles/${userId}`),
+  );
 }

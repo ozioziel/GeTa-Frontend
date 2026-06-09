@@ -87,6 +87,7 @@
 .topbar-nav-button,
 .topbar-action-button,
 .topbar-icon-button,
+.topbar-refresh-button,
 .topbar-logout-button {
   border: none;
   cursor: pointer;
@@ -118,7 +119,8 @@
 }
 
 .topbar-action-button,
-.topbar-icon-button {
+.topbar-icon-button,
+.topbar-refresh-button {
   height: 40px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.1);
@@ -131,6 +133,11 @@
 
 .topbar-action-button {
   padding: 0 16px;
+}
+
+.topbar-refresh-button {
+  padding: 0 16px;
+  font-weight: 800;
 }
 
 .topbar-icon-button {
@@ -167,9 +174,16 @@
 }
 
 .topbar-logout-button:hover,
+.topbar-refresh-button:hover,
 .topbar-action-button:hover,
 .topbar-icon-button:hover {
   transform: translateY(-2px);
+}
+
+.topbar-refresh-button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+  transform: none;
 }
 
 @media (max-width: 1100px) {
@@ -187,6 +201,7 @@
     width: 190px;
   }
 
+  .topbar-refresh-button span,
   .topbar-action-button span,
   .topbar-logout-button span {
     display: none;

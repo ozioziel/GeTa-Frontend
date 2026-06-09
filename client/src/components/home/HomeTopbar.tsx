@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo/logo.png';
 import { logout, isAuthenticated } from '../../services/authService';
+import { clearAppCache } from '../../services/cache';
 import { getNotificationSummary } from '../../services/notificationService';
 import { getMessageSummary } from '../../services/messageService';
 import type { DashboardView } from '../../types/dashboard.types';
@@ -13,6 +14,7 @@ import {
   UserIcon,
   LogoutIcon,
   CompassIcon,
+  RefreshIcon,
 } from '../icons/AppIcons';
 import '../../styles/home/HomeTopbar.css';
 
@@ -39,6 +41,7 @@ function HomeTopbar({ activeView = 'feed' }: HomeTopbarProps) {
   const [searchValue, setSearchValue] = useState('');
   const [notificationCount, setNotificationCount] = useState(0);
   const [messageCount, setMessageCount] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -71,6 +74,12 @@ function HomeTopbar({ activeView = 'feed' }: HomeTopbarProps) {
   const handleLogout = () => {
     logout();
     navigate('/login', { replace: true });
+  };
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    clearAppCache();
+    window.location.reload();
   };
 
   const goToView = (view: DashboardView, extra?: Record<string, string>) => {
@@ -135,6 +144,16 @@ function HomeTopbar({ activeView = 'feed' }: HomeTopbarProps) {
       </nav>
 
       <div className="topbar-right">
+        <button
+          type="button"
+          className="topbar-refresh-button"
+          onClick={handleRefresh}
+          disabled={refreshing}
+        >
+          <RefreshIcon size={16} />
+          <span>{refreshing ? 'Actualizando...' : 'Actualizar'}</span>
+        </button>
+
         <button
           type="button"
           className="topbar-icon-button"
