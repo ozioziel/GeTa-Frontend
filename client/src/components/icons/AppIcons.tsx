@@ -158,3 +158,27 @@ export function RefreshIcon(props: IconProps) {
     </IconBase>
   );
 }
+
+export function SunIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2.5v2.2" />
+      <path d="M12 19.3v2.2" />
+      <path d="m4.9 4.9 1.6 1.6" />
+      <path d="m17.5 17.5 1.6 1.6" />
+      <path d="M2.5 12h2.2" />
+      <path d="M19.3 12h2.2" />
+      <path d="m4.9 19.1 1.6-1.6" />
+      <path d="m17.5 6.5 1.6-1.6" />
+    </IconBase>
+  );
+}
+
+export function MoonIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M19 14.8A7.8 7.8 0 1 1 9.2 5a6.6 6.6 0 0 0 9.8 9.8Z" />
+    </IconBase>
+  );
+}

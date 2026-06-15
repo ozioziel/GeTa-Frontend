@@ -16,6 +16,7 @@ import {
   CompassIcon,
   RefreshIcon,
 } from '../icons/AppIcons';
+import ThemeToggleButton from '../common/ThemeToggleButton';
 import '../../styles/home/HomeTopbar.css';
 
 type HomeTopbarProps = {
@@ -144,6 +145,8 @@ function HomeTopbar({ activeView = 'feed' }: HomeTopbarProps) {
       </nav>
 
       <div className="topbar-right">
+        <ThemeToggleButton className="topbar-theme-button" />
+
         <button
           type="button"
           className="topbar-refresh-button"

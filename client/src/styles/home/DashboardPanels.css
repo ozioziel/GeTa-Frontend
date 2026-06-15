@@ -7,10 +7,10 @@
 .dashboard-card {
   padding: 22px;
   border-radius: 30px;
-  background: rgba(255, 255, 255, 0.085);
-  border: 1px solid rgba(255, 255, 255, 0.13);
+  background: var(--surface-glass);
+  border: 1px solid var(--surface-line);
   backdrop-filter: blur(16px);
-  box-shadow: 0 22px 52px rgba(0, 0, 0, 0.28);
+  box-shadow: var(--shadow-strong);
 }
 
 .dashboard-card-header {
@@ -24,12 +24,12 @@
 .dashboard-card-header h2,
 .dashboard-card-header h3 {
   margin: 0;
-  color: white;
+  color: var(--surface-heading);
 }
 
 .dashboard-card-header p {
   margin: 8px 0 0;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--surface-muted);
 }
 
 .dashboard-card-header button,
@@ -49,8 +49,8 @@
 .profile-public-card button {
   height: 40px;
   padding: 0 16px;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: var(--surface-chip);
+  color: var(--surface-text);
 }
 
 .dashboard-eyebrow {
@@ -70,15 +70,15 @@
 }
 
 .dashboard-empty {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.7);
+  background: var(--surface-chip);
+  border: 1px solid var(--surface-line);
+  color: var(--surface-muted);
 }
 
 .dashboard-error {
-  background: rgba(255, 45, 85, 0.12);
-  border: 1px solid rgba(255, 45, 85, 0.34);
-  color: #ffb7c5;
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border);
+  color: var(--danger-text);
 }
 
 .dashboard-grid {
@@ -99,27 +99,27 @@
 .dashboard-list-item {
   padding: 16px;
   border-radius: 20px;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--surface-panel);
+  border: 1px solid var(--surface-line);
 }
 
 .dashboard-user-card h4,
 .dashboard-list-item strong {
   display: block;
   margin: 0;
-  color: white;
+  color: var(--surface-heading);
 }
 
 .dashboard-user-card p,
 .dashboard-list-item p {
   margin: 6px 0 0;
-  color: rgba(255, 255, 255, 0.65);
+  color: var(--surface-muted);
 }
 
 .dashboard-user-card small {
   display: block;
   margin-top: 10px;
-  color: rgba(255, 255, 255, 0.48);
+  color: var(--surface-soft);
   line-height: 1.5;
 }
 
@@ -138,8 +138,8 @@
 
 .dashboard-chip {
   padding: 16px;
-  background: rgba(255, 255, 255, 0.08);
-  color: white;
+  background: var(--surface-chip);
+  color: var(--surface-text);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -159,11 +159,11 @@
 .dashboard-search-form input,
 .message-composer textarea {
   width: 100%;
-  border: 1px solid rgba(255, 255, 255, 0.13);
+  border: 1px solid var(--surface-line);
   border-radius: 18px;
   outline: none;
-  background: rgba(0, 0, 0, 0.28);
-  color: white;
+  background: var(--surface-field);
+  color: var(--surface-text);
 }
 
 .dashboard-search-form input {
@@ -182,11 +182,11 @@
   justify-content: space-between;
   gap: 14px;
   text-align: left;
-  color: white;
+  color: var(--surface-text);
 }
 
 .dashboard-list-item span {
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--surface-soft);
   font-size: 12px;
   white-space: nowrap;
 }
@@ -203,7 +203,7 @@
 }
 
 .dashboard-list-item.active {
-  background: rgba(255, 209, 0, 0.12);
+  background: var(--surface-card-highlight);
   border-color: rgba(255, 209, 0, 0.24);
 }
 
@@ -227,13 +227,13 @@
   max-width: 80%;
   padding: 14px 16px;
   border-radius: 20px 20px 20px 8px;
-  background: rgba(255, 255, 255, 0.09);
+  background: var(--surface-chip);
 }
 
 .message-bubble.mine {
   margin-left: auto;
   border-radius: 20px 20px 8px 20px;
-  background: rgba(255, 209, 0, 0.16);
+  background: var(--surface-card-highlight-strong);
 }
 
 .message-bubble p,
@@ -245,7 +245,7 @@
   display: block;
   margin-top: 8px;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--surface-soft);
 }
 
 .message-composer {
@@ -267,7 +267,7 @@
   border: none;
   border-radius: 999px;
   background: #ffd100;
-  color: #050505;
+  color: var(--text-on-brand);
   font-weight: 900;
   cursor: pointer;
 }

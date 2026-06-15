@@ -9,10 +9,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: rgba(5, 5, 5, 0.78);
-  border-right: 1px solid rgba(255, 255, 255, 0.09);
+  background: var(--surface-menu);
+  border-right: 1px solid var(--surface-line);
   backdrop-filter: blur(18px);
-  box-shadow: 14px 0 40px rgba(0, 0, 0, 0.25);
+  box-shadow: 14px 0 40px rgba(0, 0, 0, 0.18);
 }
 
 .sidebar-logo-wrapper {
@@ -22,7 +22,7 @@
   place-items: center;
   border-radius: 22px;
   border: none;
-  background: rgba(255, 209, 0, 0.13);
+  background: var(--surface-card-highlight);
   box-shadow: 0 0 28px rgba(255, 209, 0, 0.22);
   cursor: pointer;
 }
@@ -55,7 +55,7 @@
   border: none;
   border-radius: 22px;
   background: transparent;
-  color: rgba(255, 255, 255, 0.78);
+  color: var(--surface-text);
   cursor: pointer;
   transition:
     background 0.22s ease,
@@ -75,13 +75,13 @@
 }
 
 .sidebar-icon-item:hover {
-  background: rgba(255, 255, 255, 0.09);
-  color: white;
+  background: var(--surface-chip);
+  color: var(--surface-heading);
   transform: translateY(-2px);
 }
 
 .sidebar-icon-item.active {
-  background: rgba(255, 209, 0, 0.18);
+  background: var(--surface-card-highlight-strong);
   color: #ffd100;
   box-shadow: 0 0 30px rgba(255, 209, 0, 0.22);
 }
@@ -93,8 +93,8 @@
   place-items: center;
   border: none;
   border-radius: 22px;
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.7);
+  background: var(--surface-chip);
+  color: var(--surface-muted);
   font-size: 24px;
   line-height: 1;
   cursor: pointer;
@@ -105,7 +105,7 @@
 }
 
 .sidebar-hide-button:hover {
-  background: rgba(255, 209, 0, 0.16);
+  background: var(--surface-card-highlight-strong);
   color: #ffd100;
   transform: scale(1.08);
 }
@@ -119,10 +119,10 @@
   height: 66px;
   display: grid;
   place-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid var(--surface-line-strong);
   border-radius: 24px;
   background: rgba(255, 209, 0, 0.96);
-  color: #050505;
+  color: var(--text-on-brand);
   font-size: 28px;
   font-weight: 900;
   cursor: pointer;
@@ -152,7 +152,7 @@
     justify-content: center;
     border-right: none;
     border-radius: 28px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid var(--surface-line);
   }
 
   .sidebar-logo-wrapper,

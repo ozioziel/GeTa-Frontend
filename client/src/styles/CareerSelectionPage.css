@@ -2,8 +2,8 @@
   position: relative;
   min-height: 100vh;
   overflow-x: hidden;
-  background: #050505;
-  color: white;
+  background: var(--career-page-bg);
+  color: var(--surface-heading);
 }
 
 .career-bg-image {
@@ -28,22 +28,14 @@
   inset: 0;
   z-index: 1;
   backdrop-filter: blur(2px);
-  background: rgba(0, 0, 0, 0.28);
+  background: var(--career-blur-overlay);
 }
 
 .career-bg-overlay {
   position: fixed;
   inset: 0;
   z-index: 2;
-  background:
-    radial-gradient(circle at top left, rgba(255, 209, 0, 0.2), transparent 32%),
-    radial-gradient(circle at bottom right, rgba(0, 61, 165, 0.26), transparent 38%),
-    linear-gradient(
-      135deg,
-      rgba(0, 0, 0, 0.82) 0%,
-      rgba(0, 0, 0, 0.62) 45%,
-      rgba(0, 0, 0, 0.86) 100%
-    );
+  background: var(--career-overlay);
 }
 
 .career-bg-shine {
@@ -78,7 +70,7 @@
   margin: 0 0 14px;
   font-size: 13px;
   letter-spacing: 5px;
-  color: rgba(255, 255, 255, 0.68);
+  color: var(--surface-muted);
 }
 
 .career-title {
@@ -93,7 +85,7 @@
 .career-subtitle {
   width: min(720px, 100%);
   margin: 14px auto 0;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--surface-text);
   font-size: 16px;
   line-height: 1.6;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.65);
@@ -104,9 +96,9 @@
   margin: 0 auto 24px;
   padding: 14px 18px;
   border-radius: 16px;
-  background: rgba(255, 45, 85, 0.14);
-  border: 1px solid rgba(255, 45, 85, 0.38);
-  color: #ffc2cd;
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border);
+  color: var(--danger-text);
   text-align: center;
   font-size: 14px;
   backdrop-filter: blur(8px);
@@ -117,9 +109,9 @@
   margin: 70px auto;
   padding: 18px 26px;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  color: rgba(255, 255, 255, 0.82);
+  background: var(--surface-glass);
+  border: 1px solid var(--surface-line);
+  color: var(--surface-text);
   backdrop-filter: blur(12px);
 }
 
@@ -131,15 +123,15 @@
 
 .career-card {
   position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid var(--surface-line);
   border-radius: 28px;
   overflow: hidden;
-  background: rgba(10, 10, 10, 0.45);
-  color: white;
+  background: var(--surface-glass);
+  color: var(--surface-heading);
   cursor: pointer;
   text-align: left;
   backdrop-filter: blur(14px);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+  box-shadow: var(--shadow-medium);
   transition:
     transform 0.25s ease,
     border-color 0.25s ease,
@@ -150,8 +142,8 @@
 
 .career-card:hover {
   transform: translateY(-8px) scale(1.02);
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.42);
+  background: var(--surface-glass-strong);
+  border-color: var(--surface-line-strong);
   box-shadow: 0 24px 54px rgba(0, 0, 0, 0.45);
 }
 
@@ -162,7 +154,7 @@
 
 .career-card-selected {
   border-color: #ffd100;
-  background: rgba(255, 209, 0, 0.12);
+  background: var(--surface-card-highlight);
   box-shadow:
     0 0 34px rgba(255, 209, 0, 0.28),
     0 24px 54px rgba(0, 0, 0, 0.45);
@@ -193,7 +185,7 @@
 .career-card-body {
   position: relative;
   padding: 18px 18px 22px;
-  background: rgba(0, 0, 0, 0.22);
+  background: var(--career-card-body);
 }
 
 .career-short {
@@ -205,7 +197,7 @@
   border-radius: 18px;
   font-weight: 900;
   font-size: 18px;
-  color: #050505;
+  color: var(--text-on-brand);
   background: #ffd100;
   box-shadow: 0 0 28px rgba(255, 209, 0, 0.32);
 }
@@ -220,7 +212,7 @@
 .career-card p {
   margin: 0;
   min-height: 48px;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--surface-muted);
   font-size: 13px;
   line-height: 1.45;
 }
@@ -241,7 +233,7 @@
   border: none;
   border-radius: 999px;
   background: #ffd100;
-  color: #050505;
+  color: var(--text-on-brand);
   cursor: pointer;
   font-size: 15px;
   font-weight: 900;
@@ -269,14 +261,14 @@
   margin: 20px auto 0;
   border: none;
   background: transparent;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--surface-muted);
   cursor: pointer;
   font-size: 14px;
   transition: color 0.2s ease;
 }
 
 .career-back-button:hover {
-  color: white;
+  color: var(--surface-heading);
 }
 
 .career-back-button:disabled {
@@ -349,14 +341,7 @@
   }
 
   .career-bg-overlay {
-    background:
-      radial-gradient(circle at top, rgba(255, 209, 0, 0.16), transparent 34%),
-      linear-gradient(
-        180deg,
-        rgba(0, 0, 0, 0.86) 0%,
-        rgba(0, 0, 0, 0.62) 45%,
-        rgba(0, 0, 0, 0.9) 100%
-      );
+    background: var(--career-overlay-mobile);
   }
 
   .career-continue-button {

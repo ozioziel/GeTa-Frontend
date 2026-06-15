@@ -2,10 +2,10 @@
   width: 100%;
   padding: 22px;
   border-radius: 30px;
-  background: rgba(255, 255, 255, 0.085);
-  border: 1px solid rgba(255, 255, 255, 0.13);
+  background: var(--surface-glass);
+  border: 1px solid var(--surface-line);
   backdrop-filter: blur(16px);
-  box-shadow: 0 22px 52px rgba(0, 0, 0, 0.28);
+  box-shadow: var(--shadow-strong);
 }
 
 .home-page .post-card-highlight {
@@ -49,14 +49,14 @@
 .home-page .post-author-link {
   padding: 0;
   background: transparent;
-  color: white;
+  color: var(--surface-heading);
   font-size: 16px;
   font-weight: 900;
 }
 
 .home-page .post-author-info p {
   margin: 5px 0 0;
-  color: rgba(255, 255, 255, 0.56);
+  color: var(--surface-soft);
   font-size: 13px;
   font-weight: 600;
 }
@@ -70,8 +70,8 @@
   height: 40px;
   border: none;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.72);
+  background: var(--surface-chip);
+  color: var(--surface-muted);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -85,8 +85,8 @@
   min-width: 190px;
   padding: 10px;
   border-radius: 18px;
-  background: rgba(10, 12, 18, 0.96);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--surface-menu);
+  border: 1px solid var(--surface-line);
   box-shadow: 0 18px 45px rgba(0, 0, 0, 0.34);
   display: flex;
   flex-direction: column;
@@ -98,8 +98,8 @@
   height: 40px;
   border: none;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.06);
-  color: white;
+  background: var(--surface-chip);
+  color: var(--surface-text);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -112,7 +112,7 @@
   margin-top: 16px;
   padding: 8px 12px;
   border-radius: 999px;
-  background: rgba(255, 209, 0, 0.14);
+  background: var(--surface-card-highlight);
   color: #ffd100;
   font-size: 12px;
   font-weight: 900;
@@ -122,7 +122,7 @@
 
 .home-page .post-content {
   margin: 20px 0;
-  color: rgba(255, 255, 255, 0.88);
+  color: var(--surface-text);
   font-size: 16px;
   line-height: 1.65;
   white-space: pre-wrap;
@@ -133,7 +133,7 @@
   margin: 16px 0;
   overflow: hidden;
   border-radius: 24px;
-  background: rgba(0, 0, 0, 0.28);
+  background: var(--surface-panel-strong);
 }
 
 .home-page .post-media {
@@ -153,7 +153,7 @@
   background:
     radial-gradient(circle at top, rgba(255, 209, 0, 0.18), transparent 36%),
     linear-gradient(135deg, rgba(8, 12, 20, 0.94), rgba(17, 27, 44, 0.94));
-  color: rgba(255, 255, 255, 0.82);
+  color: var(--surface-text);
 }
 
 .home-page .post-media-fallback strong {
@@ -163,7 +163,7 @@
 
 .home-page .post-media-fallback span {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.62);
+  color: var(--surface-muted);
 }
 
 .home-page .post-stats {
@@ -171,7 +171,7 @@
   justify-content: space-between;
   gap: 12px;
   padding-bottom: 13px;
-  color: rgba(255, 255, 255, 0.52);
+  color: var(--surface-soft);
   font-size: 13px;
   font-weight: 600;
 }
@@ -181,8 +181,8 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
   padding: 12px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.09);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  border-top: 1px solid var(--surface-line);
+  border-bottom: 1px solid var(--surface-line);
 }
 
 .home-page .post-action {
@@ -190,7 +190,7 @@
   border: none;
   border-radius: 16px;
   background: transparent;
-  color: rgba(255, 255, 255, 0.68);
+  color: var(--surface-muted);
   cursor: pointer;
   font-size: 14px;
   font-weight: 900;
@@ -202,7 +202,7 @@
 
 .home-page .post-action:hover,
 .home-page .post-action.active {
-  background: rgba(255, 209, 0, 0.14);
+  background: var(--surface-card-highlight);
   color: #ffd100;
 }
 
@@ -213,7 +213,7 @@
 
 .home-page .post-feedback {
   margin: 12px 0 0;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--surface-muted);
   font-size: 13px;
 }
 
@@ -225,15 +225,15 @@
   margin: 0 0 12px;
   padding: 11px 13px;
   border-radius: 14px;
-  background: rgba(255, 45, 85, 0.12);
-  border: 1px solid rgba(255, 45, 85, 0.3);
-  color: #ffb7c5;
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border);
+  color: var(--danger-text);
   font-size: 13px;
 }
 
 .home-page .comment-empty {
   margin: 0 0 14px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--surface-soft);
   font-size: 13px;
 }
 
@@ -258,7 +258,7 @@
   place-items: center;
   flex: 0 0 auto;
   border-radius: 13px;
-  background: rgba(255, 209, 0, 0.18);
+  background: var(--surface-card-highlight-strong);
   color: #ffd100;
   font-size: 13px;
   font-weight: 900;
@@ -268,7 +268,7 @@
   max-width: 100%;
   padding: 11px 14px;
   border-radius: 17px;
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--surface-panel);
 }
 
 .home-page .comment-meta {
@@ -285,19 +285,19 @@
 }
 
 .home-page .comment-bubble h4 {
-  color: white;
+  color: var(--surface-heading);
   font-size: 13px;
   font-weight: 900;
 }
 
 .home-page .comment-bubble span {
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--surface-soft);
   font-size: 11px;
 }
 
 .home-page .comment-bubble p {
   margin-top: 6px;
-  color: rgba(255, 255, 255, 0.76);
+  color: var(--surface-text);
   font-size: 13px;
   line-height: 1.45;
 }
@@ -316,8 +316,8 @@
   outline: none;
   border-radius: 999px;
   padding: 0 16px;
-  background: rgba(0, 0, 0, 0.25);
-  color: white;
+  background: var(--surface-field);
+  color: var(--surface-text);
   font-size: 14px;
 }
 
@@ -327,7 +327,7 @@
   border: none;
   border-radius: 999px;
   background: #ffd100;
-  color: #050505;
+  color: var(--text-on-brand);
   cursor: pointer;
   font-weight: 900;
 }

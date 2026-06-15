@@ -10,8 +10,8 @@
   align-items: center;
   gap: 18px;
   padding: 0 24px;
-  background: rgba(6, 8, 13, 0.74);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--surface-menu);
+  border-bottom: 1px solid var(--surface-line);
   backdrop-filter: blur(18px);
 }
 
@@ -40,7 +40,7 @@
   height: 46px;
   border: none;
   border-radius: 16px;
-  background: rgba(255, 209, 0, 0.14);
+  background: var(--surface-card-highlight);
   cursor: pointer;
   display: grid;
   place-items: center;
@@ -61,12 +61,12 @@
   height: 42px;
   padding: 0 14px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.09);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--surface-chip);
+  border: 1px solid var(--surface-line);
 }
 
 .topbar-search-icon {
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--surface-soft);
   display: inline-flex;
 }
 
@@ -76,22 +76,23 @@
   border: none;
   outline: none;
   background: transparent;
-  color: white;
+  color: var(--surface-text);
   font-size: 14px;
 }
 
 .topbar-search input::placeholder {
-  color: rgba(255, 255, 255, 0.42);
+  color: var(--surface-faint);
 }
 
 .topbar-nav-button,
 .topbar-action-button,
 .topbar-icon-button,
+.topbar-theme-button,
 .topbar-refresh-button,
 .topbar-logout-button {
   border: none;
   cursor: pointer;
-  color: white;
+  color: var(--surface-text);
   transition:
     background 0.2s ease,
     color 0.2s ease,
@@ -104,7 +105,7 @@
   padding: 0 16px;
   border-radius: 14px;
   background: transparent;
-  color: rgba(255, 255, 255, 0.62);
+  color: var(--surface-muted);
   font-weight: 700;
   display: inline-flex;
   align-items: center;
@@ -114,16 +115,17 @@
 
 .topbar-nav-button:hover,
 .topbar-nav-button.active {
-  background: rgba(255, 209, 0, 0.14);
+  background: var(--surface-card-highlight);
   color: #ffd100;
 }
 
 .topbar-action-button,
 .topbar-icon-button,
+.topbar-theme-button,
 .topbar-refresh-button {
   height: 40px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--surface-chip);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -133,6 +135,12 @@
 
 .topbar-action-button {
   padding: 0 16px;
+}
+
+.topbar-theme-button {
+  padding: 0 16px;
+  font-weight: 800;
+  box-shadow: none;
 }
 
 .topbar-refresh-button {
@@ -166,7 +174,7 @@
   padding: 0 16px;
   border-radius: 999px;
   background: #ffd100;
-  color: #050505;
+  color: var(--text-on-brand);
   font-weight: 900;
   display: inline-flex;
   align-items: center;
@@ -175,6 +183,7 @@
 
 .topbar-logout-button:hover,
 .topbar-refresh-button:hover,
+.topbar-theme-button:hover,
 .topbar-action-button:hover,
 .topbar-icon-button:hover {
   transform: translateY(-2px);
@@ -202,6 +211,7 @@
   }
 
   .topbar-refresh-button span,
+  .topbar-theme-button span,
   .topbar-action-button span,
   .topbar-logout-button span {
     display: none;

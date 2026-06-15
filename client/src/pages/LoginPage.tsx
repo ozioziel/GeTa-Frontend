@@ -3,6 +3,7 @@ import type { ChangeEvent, FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../styles/LoginPage.css';
 import FormCard from '../components/FormCard';
+import ThemeToggleButton from '../components/common/ThemeToggleButton';
 import { establishSession, loginRequest } from '../services/authService';
 
 type LoginFormData = {
@@ -75,6 +76,8 @@ function LoginPage() {
 
   return (
     <main className="login-page">
+      <ThemeToggleButton className="theme-toggle-floating" />
+
       <video className="background-video" autoPlay muted loop playsInline>
         <source src={videoUrl} type="video/mp4" />
       </video>

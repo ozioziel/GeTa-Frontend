@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { establishSession, registerRequest } from '../services/authService';
 import { getCareers } from '../services/careerService';
+import ThemeToggleButton from '../components/common/ThemeToggleButton';
 import type { Career } from '../types/career.types';
 import '../styles/CareerSelectionPage.css';
 
@@ -206,6 +207,8 @@ function CareerSelectionPage() {
 
   return (
     <main className="career-selection-page">
+      <ThemeToggleButton className="theme-toggle-floating" />
+
       <div
         className="career-bg-image"
         style={{

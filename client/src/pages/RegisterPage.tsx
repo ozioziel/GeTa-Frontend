@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/RegisterPage.css';
 import FormCard from '../components/FormCard';
+import ThemeToggleButton from '../components/common/ThemeToggleButton';
 
 type RegisterFormData = {
   fullName: string;
@@ -105,6 +106,8 @@ function RegisterPage() {
 
   return (
     <main className="register-page" onMouseMove={handleMouseMove}>
+      <ThemeToggleButton className="theme-toggle-floating" />
+
       <div
         className="cursor-light"
         style={{

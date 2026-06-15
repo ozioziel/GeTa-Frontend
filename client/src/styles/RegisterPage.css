@@ -3,11 +3,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #000;
+    background: var(--auth-page-bg);
     position: relative;
     overflow: hidden;
-    color: white;
-    font-family: Arial, sans-serif;
+    color: var(--surface-heading);
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
 }
 
 /* Luz amarilla suave del fondo */
@@ -63,7 +63,7 @@
 .register-page .dialogue-text {
     font-size: 34px;
     line-height: 1.5;
-    color: #f2f2f2;
+    color: var(--surface-heading);
     letter-spacing: 1px;
     text-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
     animation: registerDialogueFade 0.7s ease;
@@ -77,7 +77,7 @@
 .register-page .dialogue-hint {
     margin-top: 40px;
     font-size: 14px;
-    color: #777;
+    color: var(--surface-soft);
     animation: registerHintBlink 1.5s ease-in-out infinite;
 }
 
@@ -135,7 +135,7 @@
 .register-page .register-brand {
     font-size: 14px;
     margin-bottom: 12px;
-    color: #cfcfcf;
+    color: var(--surface-muted);
 }
 
 .register-page .register-title {
@@ -148,7 +148,7 @@
 .register-page .register-subtitle {
     font-size: 15px;
     margin-bottom: 12px;
-    color: #e5e5e5;
+    color: var(--surface-muted);
 }
 
 /* Formulario */
@@ -167,21 +167,21 @@
 .register-page .form-group label {
     font-size: 12px;
     margin-bottom: 5px;
-    color: #f2f2f2;
+    color: var(--surface-text);
 }
 
 .register-page .form-group input {
     height: 50px;
     padding: 14px;
     margin-bottom: 20px;
-    border: 1px solid #444;
+    border: 1px solid var(--surface-line-strong);
     border-radius: 12px;
-    background: #2a2a2a;
-    color: white;
+    background: var(--surface-field);
+    color: var(--surface-text);
 }
 
 .register-page .form-group input::placeholder {
-    color: #999;
+    color: var(--surface-faint);
 }
 
 .register-page .form-group input:focus {
@@ -197,7 +197,7 @@
     border: none;
     border-radius: 12px;
     background: #ffcc00;
-    color: #2523b1;
+    color: var(--text-on-brand);
     font-size: 17px;
     font-weight: bold;
     cursor: pointer;
@@ -229,9 +229,9 @@
 
 /* Error */
 .register-page .register-error {
-    color: #ff7b7b;
-    background: rgba(255, 0, 0, 0.12);
-    border: 1px solid rgba(255, 0, 0, 0.35);
+    color: var(--danger-text);
+    background: var(--danger-bg);
+    border: 1px solid var(--danger-border);
     padding: 10px;
     border-radius: 10px;
     font-size: 13px;
@@ -243,7 +243,7 @@
 .register-page .login-text {
     text-align: center;
     font-size: 15px;
-    color: #f2f2f2;
+    color: var(--surface-text);
 }
 
 .register-page .login-text a {
@@ -262,7 +262,7 @@
     margin-top: 12px;
     background: transparent;
     border: none;
-    color: #999;
+    color: var(--surface-soft);
     cursor: pointer;
     font-size: 14px;
 }
@@ -305,13 +305,13 @@
   padding: 14px;
   margin-bottom: 20px;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(20, 20, 20, 0.85);
-  color: white;
+  border: 1px solid var(--surface-line-strong);
+  background: var(--surface-field);
+  color: var(--surface-text);
   outline: none;
 }
 
 .register-select option {
-  background: #111;
-  color: white;
+  background: var(--surface-menu);
+  color: var(--surface-text);
 }
