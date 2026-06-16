@@ -31,15 +31,19 @@
 }
 
 .home-layout {
+  --home-sidebar-offset: 264px;
   position: relative;
   z-index: 2;
-  width: calc(100% - 128px);
-  margin-left: 112px;
+  width: calc(100% - var(--home-sidebar-offset));
+  margin-left: var(--home-sidebar-offset);
   padding: 92px 24px 40px;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-items: start;
   gap: 22px;
+  transition:
+    width 0.24s ease,
+    margin-left 0.24s ease;
 }
 
 .home-layout-with-side {

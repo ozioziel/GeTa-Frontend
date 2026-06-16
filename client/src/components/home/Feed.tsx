@@ -11,6 +11,7 @@ import type { Post } from '../../types/post.types';
 import '../../styles/home/Feed.css';
 
 type FeedMode = 'all' | 'career' | 'saved' | 'author';
+type FeedVariant = 'default' | 'profile';
 
 type FeedProps = {
   title: string;
@@ -22,6 +23,7 @@ type FeedProps = {
   showComposer?: boolean;
   focusComposer?: boolean;
   featuredPostId?: string;
+  variant?: FeedVariant;
 };
 
 function Feed({
@@ -34,6 +36,7 @@ function Feed({
   showComposer = true,
   focusComposer = false,
   featuredPostId = '',
+  variant = 'default',
 }: FeedProps) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loadingPosts, setLoadingPosts] = useState<boolean>(true);
@@ -137,11 +140,21 @@ function Feed({
   };
 
   return (
-    <section className="home-feed">
-      <div className="feed-header-card">
-        <p className="feed-label">Red social UCB</p>
-        <h1>{title}</h1>
-        <p>{subtitle}</p>
+    <section className={variant === 'profile' ? 'home-feed home-feed-profile' : 'home-feed'}>
+      <div className={variant === 'profile' ? 'feed-header-card feed-header-card-profile' : 'feed-header-card'}>
+        <div className="feed-header-copy">
+          <p className="feed-label">
+            {variant === 'profile' ? 'Perfil academico' : 'Red social UCB'}
+          </p>
+          <h1>{title}</h1>
+          <p>{subtitle}</p>
+        </div>
+
+        {variant === 'profile' && (
+          <div className="feed-header-meta">
+            {loadingPosts ? 'Cargando publicaciones...' : `${posts.length} publicaciones`}
+          </div>
+        )}
       </div>
 
       {featuredPostId && (
@@ -173,12 +186,13 @@ function Feed({
       ) : posts.length === 0 ? (
         <div className="feed-state">{emptyMessage}</div>
       ) : (
-        <div className="feed-posts">
+        <div className={variant === 'profile' ? 'feed-posts feed-posts-profile' : 'feed-posts'}>
           {posts.map((post) => (
             <PostCard
               key={post.id}
               post={post}
               highlight={post.id === featuredPostId}
+              variant={variant}
               onPostUpdated={handlePostUpdated}
               onPostDeleted={handlePostDeleted}
             />

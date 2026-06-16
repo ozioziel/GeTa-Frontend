@@ -25,6 +25,7 @@ import '../../styles/home/PostCard.css';
 type PostCardProps = {
   post: Post;
   highlight?: boolean;
+  variant?: 'default' | 'profile';
   onPostUpdated?: (post: Post) => void;
   onPostDeleted?: (postId: string) => void;
 };
@@ -43,6 +44,7 @@ function formatDate(date: string) {
 function PostCard({
   post,
   highlight = false,
+  variant = 'default',
   onPostUpdated,
   onPostDeleted,
 }: PostCardProps) {
@@ -206,18 +208,30 @@ function PostCard({
     }
 
     const isVideo = post.mediaUrl.match(/\.(mp4|webm|ogg)$/i);
+    const wrapperClassName =
+      variant === 'profile' && !isVideo
+        ? 'post-media-wrapper post-media-wrapper-uniform'
+        : 'post-media-wrapper';
+    const mediaClassName =
+      variant === 'profile' && !isVideo
+        ? 'post-media post-media-uniform'
+        : 'post-media';
+    const fallbackClassName =
+      variant === 'profile' && !isVideo
+        ? 'post-media-fallback post-media-fallback-uniform'
+        : 'post-media-fallback';
 
     return (
-      <div className="post-media-wrapper">
+      <div className={wrapperClassName}>
         {isVideo ? (
-          <video src={post.mediaUrl} className="post-media" controls />
+          <video src={post.mediaUrl} className={mediaClassName} controls />
         ) : (
           <FallbackImage
             src={post.mediaUrl}
             alt="Publicacion"
-            className="post-media"
+            className={mediaClassName}
             fallback={
-              <div className="post-media-fallback">
+              <div className={fallbackClassName}>
                 <strong>Imagen no disponible</strong>
                 <span>El archivo ya no existe o la URL no responde.</span>
               </div>
@@ -231,7 +245,11 @@ function PostCard({
   return (
     <article
       id={`post-${post.id}`}
-      className={highlight ? 'post-card post-card-highlight' : 'post-card'}
+      className={
+        highlight
+          ? `post-card post-card-${variant} post-card-highlight`
+          : `post-card post-card-${variant}`
+      }
     >
       <div className="post-header">
         <button

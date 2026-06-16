@@ -417,7 +417,7 @@ function ProfilePage() {
               title={isOwnProfile ? 'Tus publicaciones' : 'Actividad reciente'}
               subtitle={
                 isOwnProfile
-                  ? 'Tus publicaciones mas recientes dentro de GeTa.'
+                  ? 'Tus aportes se muestran aqui con el mismo componente reutilizable del feed principal.'
                   : 'Lo ultimo que ha compartido este perfil.'
               }
               emptyMessage={
@@ -428,6 +428,7 @@ function ProfilePage() {
               mode="author"
               authorId={profileUserId}
               showComposer={false}
+              variant="profile"
             />
           </div>
         )}

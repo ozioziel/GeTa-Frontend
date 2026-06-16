@@ -1,4 +1,4 @@
-.home-page .post-card {
+:is(.home-page, .profile-page) .post-card {
   width: 100%;
   padding: 22px;
   border-radius: 30px;
@@ -8,20 +8,20 @@
   box-shadow: var(--shadow-strong);
 }
 
-.home-page .post-card-highlight {
+:is(.home-page, .profile-page) .post-card-highlight {
   border-color: rgba(255, 209, 0, 0.45);
   box-shadow:
     0 0 0 1px rgba(255, 209, 0, 0.18),
     0 24px 60px rgba(0, 0, 0, 0.32);
 }
 
-.home-page .post-header {
+:is(.home-page, .profile-page) .post-header {
   display: flex;
   align-items: center;
   gap: 14px;
 }
 
-.home-page .post-avatar {
+:is(.home-page, .profile-page) .post-avatar {
   width: 54px;
   height: 54px;
   display: grid;
@@ -35,18 +35,18 @@
   box-shadow: 0 0 28px rgba(255, 209, 0, 0.24);
 }
 
-.home-page .post-avatar-button,
-.home-page .post-author-link {
+:is(.home-page, .profile-page) .post-avatar-button,
+:is(.home-page, .profile-page) .post-author-link {
   border: none;
   cursor: pointer;
 }
 
-.home-page .post-author-info {
+:is(.home-page, .profile-page) .post-author-info {
   flex: 1;
   min-width: 0;
 }
 
-.home-page .post-author-link {
+:is(.home-page, .profile-page) .post-author-link {
   padding: 0;
   background: transparent;
   color: var(--surface-heading);
@@ -54,18 +54,18 @@
   font-weight: 900;
 }
 
-.home-page .post-author-info p {
+:is(.home-page, .profile-page) .post-author-info p {
   margin: 5px 0 0;
   color: var(--surface-soft);
   font-size: 13px;
   font-weight: 600;
 }
 
-.home-page .post-header-actions {
+:is(.home-page, .profile-page) .post-header-actions {
   position: relative;
 }
 
-.home-page .post-more-button {
+:is(.home-page, .profile-page) .post-more-button {
   width: 40px;
   height: 40px;
   border: none;
@@ -78,7 +78,7 @@
   justify-content: center;
 }
 
-.home-page .post-menu {
+:is(.home-page, .profile-page) .post-menu {
   position: absolute;
   top: 48px;
   right: 0;
@@ -93,7 +93,7 @@
   gap: 8px;
 }
 
-.home-page .post-menu button {
+:is(.home-page, .profile-page) .post-menu button {
   width: 100%;
   height: 40px;
   border: none;
@@ -107,7 +107,7 @@
   gap: 8px;
 }
 
-.home-page .post-highlight-chip {
+:is(.home-page, .profile-page) .post-highlight-chip {
   display: inline-flex;
   margin-top: 16px;
   padding: 8px 12px;
@@ -120,7 +120,7 @@
   text-transform: uppercase;
 }
 
-.home-page .post-content {
+:is(.home-page, .profile-page) .post-content {
   margin: 20px 0;
   color: var(--surface-text);
   font-size: 16px;
@@ -128,7 +128,7 @@
   white-space: pre-wrap;
 }
 
-.home-page .post-media-wrapper {
+:is(.home-page, .profile-page) .post-media-wrapper {
   width: 100%;
   margin: 16px 0;
   overflow: hidden;
@@ -136,14 +136,14 @@
   background: var(--surface-panel-strong);
 }
 
-.home-page .post-media {
+:is(.home-page, .profile-page) .post-media {
   display: block;
   width: 100%;
   max-height: 620px;
   object-fit: cover;
 }
 
-.home-page .post-media-fallback {
+:is(.home-page, .profile-page) .post-media-fallback {
   min-height: 260px;
   display: grid;
   place-items: center;
@@ -156,17 +156,17 @@
   color: var(--surface-text);
 }
 
-.home-page .post-media-fallback strong {
+:is(.home-page, .profile-page) .post-media-fallback strong {
   font-size: 20px;
   color: #ffd100;
 }
 
-.home-page .post-media-fallback span {
+:is(.home-page, .profile-page) .post-media-fallback span {
   font-size: 14px;
   color: var(--surface-muted);
 }
 
-.home-page .post-stats {
+:is(.home-page, .profile-page) .post-stats {
   display: flex;
   justify-content: space-between;
   gap: 12px;
@@ -176,7 +176,7 @@
   font-weight: 600;
 }
 
-.home-page .post-actions {
+:is(.home-page, .profile-page) .post-actions {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
@@ -185,7 +185,7 @@
   border-bottom: 1px solid var(--surface-line);
 }
 
-.home-page .post-action {
+:is(.home-page, .profile-page) .post-action {
   min-height: 44px;
   border: none;
   border-radius: 16px;
@@ -200,28 +200,28 @@
   gap: 8px;
 }
 
-.home-page .post-action:hover,
-.home-page .post-action.active {
+:is(.home-page, .profile-page) .post-action:hover,
+:is(.home-page, .profile-page) .post-action.active {
   background: var(--surface-card-highlight);
   color: #ffd100;
 }
 
-.home-page .post-action:disabled {
+:is(.home-page, .profile-page) .post-action:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.home-page .post-feedback {
+:is(.home-page, .profile-page) .post-feedback {
   margin: 12px 0 0;
   color: var(--surface-muted);
   font-size: 13px;
 }
 
-.home-page .post-comments {
+:is(.home-page, .profile-page) .post-comments {
   margin-top: 16px;
 }
 
-.home-page .comment-error {
+:is(.home-page, .profile-page) .comment-error {
   margin: 0 0 12px;
   padding: 11px 13px;
   border-radius: 14px;
@@ -231,27 +231,27 @@
   font-size: 13px;
 }
 
-.home-page .comment-empty {
+:is(.home-page, .profile-page) .comment-empty {
   margin: 0 0 14px;
   color: var(--surface-soft);
   font-size: 13px;
 }
 
-.home-page .comment-list {
+:is(.home-page, .profile-page) .comment-list {
   display: flex;
   flex-direction: column;
   gap: 11px;
   margin-bottom: 15px;
 }
 
-.home-page .comment-item {
+:is(.home-page, .profile-page) .comment-item {
   display: flex;
   align-items: flex-start;
   gap: 10px;
 }
 
-.home-page .comment-avatar,
-.home-page .comment-input-avatar {
+:is(.home-page, .profile-page) .comment-avatar,
+:is(.home-page, .profile-page) .comment-input-avatar {
   width: 36px;
   height: 36px;
   display: grid;
@@ -264,51 +264,51 @@
   font-weight: 900;
 }
 
-.home-page .comment-bubble {
+:is(.home-page, .profile-page) .comment-bubble {
   max-width: 100%;
   padding: 11px 14px;
   border-radius: 17px;
   background: var(--surface-panel);
 }
 
-.home-page .comment-meta {
+:is(.home-page, .profile-page) .comment-meta {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
 
-.home-page .comment-bubble h4,
-.home-page .comment-bubble span,
-.home-page .comment-bubble p {
+:is(.home-page, .profile-page) .comment-bubble h4,
+:is(.home-page, .profile-page) .comment-bubble span,
+:is(.home-page, .profile-page) .comment-bubble p {
   margin: 0;
 }
 
-.home-page .comment-bubble h4 {
+:is(.home-page, .profile-page) .comment-bubble h4 {
   color: var(--surface-heading);
   font-size: 13px;
   font-weight: 900;
 }
 
-.home-page .comment-bubble span {
+:is(.home-page, .profile-page) .comment-bubble span {
   color: var(--surface-soft);
   font-size: 11px;
 }
 
-.home-page .comment-bubble p {
+:is(.home-page, .profile-page) .comment-bubble p {
   margin-top: 6px;
   color: var(--surface-text);
   font-size: 13px;
   line-height: 1.45;
 }
 
-.home-page .comment-input-wrapper {
+:is(.home-page, .profile-page) .comment-input-wrapper {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.home-page .comment-input-wrapper input {
+:is(.home-page, .profile-page) .comment-input-wrapper input {
   flex: 1;
   min-width: 0;
   height: 42px;
@@ -321,7 +321,7 @@
   font-size: 14px;
 }
 
-.home-page .comment-input-wrapper button {
+:is(.home-page, .profile-page) .comment-input-wrapper button {
   height: 42px;
   padding: 0 17px;
   border: none;
@@ -332,13 +332,36 @@
   font-weight: 900;
 }
 
+.profile-page .post-card-profile {
+  background:
+    linear-gradient(180deg, var(--surface-glass-strong), var(--surface-glass));
+}
+
+.profile-page .post-card-profile .post-media-wrapper-uniform {
+  display: grid;
+  aspect-ratio: 16 / 10;
+}
+
+.profile-page .post-card-profile .post-media-uniform {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  max-height: none;
+  object-fit: cover;
+}
+
+.profile-page .post-card-profile .post-media-fallback-uniform {
+  min-height: 100%;
+  height: 100%;
+}
+
 @media (max-width: 620px) {
-  .home-page .post-card {
+  :is(.home-page, .profile-page) .post-card {
     padding: 18px;
     border-radius: 24px;
   }
 
-  .home-page .post-actions {
+  :is(.home-page, .profile-page) .post-actions {
     grid-template-columns: repeat(2, 1fr);
   }
 }

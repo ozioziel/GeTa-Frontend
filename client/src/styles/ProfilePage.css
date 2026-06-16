@@ -31,16 +31,17 @@
 }
 
 .profile-layout {
+  --home-sidebar-offset: 264px;
   position: relative;
   z-index: 2;
-
-  width: calc(100% - 128px);
+  width: calc(100% - var(--home-sidebar-offset));
   max-width: 1120px;
-
-  margin-left: 112px;
+  margin-left: var(--home-sidebar-offset);
   margin-right: auto;
-
   padding: 92px 24px 42px;
+  transition:
+    width 0.24s ease,
+    margin-left 0.24s ease;
 }
 
 .profile-header-card,
