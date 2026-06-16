@@ -169,6 +169,82 @@
   box-shadow: none;
 }
 
+.recovery-hint {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  text-align: center;
+}
+
+.recovery-link {
+  border: none;
+  background: transparent;
+  color: #ffd100;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 900;
+  padding: 0;
+  font-size: 14px;
+}
+
+.recovery-link:hover {
+  opacity: 0.9;
+}
+
+.recovery-panel {
+  margin-top: 22px;
+  padding: 18px;
+  border-radius: 20px;
+  background: rgba(7, 11, 22, 0.88);
+  border: 1px solid rgba(255, 209, 0, 0.18);
+}
+
+.recovery-description {
+  margin: 0 0 14px;
+  color: var(--surface-muted);
+  font-size: 13px;
+}
+
+.recovery-code-display {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  border-radius: 14px;
+  background: rgba(255, 209, 0, 0.08);
+  color: #ffd100;
+  font-weight: 700;
+}
+
+.recovery-code-display span {
+  color: var(--surface-muted);
+  font-size: 13px;
+}
+
+.recovery-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.recovery-cancel {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: transparent;
+  color: var(--surface-text);
+  border-radius: 999px;
+  padding: 12px 18px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.recovery-cancel:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
 .button-arrow {
   font-size: 19px;
   line-height: 1;

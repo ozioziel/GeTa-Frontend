@@ -23,6 +23,11 @@ type RegisterPayload = {
   careerId: string;
 };
 
+type ResetPasswordPayload = {
+  email: string;
+  newPassword: string;
+};
+
 async function sendAuthRequest<TBody>(path: string, body: TBody) {
   const response = await fetch(`${API_URL}${path}`, {
     method: 'POST',
@@ -132,6 +137,10 @@ export async function loginRequest(payload: LoginPayload) {
 
 export async function registerRequest(payload: RegisterPayload) {
   return sendAuthRequest('/auth/register', payload);
+}
+
+export async function resetPasswordRequest(payload: ResetPasswordPayload) {
+  return sendAuthRequest('/auth/reset-password', payload);
 }
 
 export async function getCurrentCareerId(): Promise<string> {
