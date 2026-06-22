@@ -1,4 +1,4 @@
-FROM node:20-alpine AS build
+FROM node:24-bookworm-slim AS build
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ ENV VITE_API_URL=$VITE_API_URL
 RUN npm run build
 
 
-FROM nginx:1.27-alpine AS production
+FROM nginx:1.27-bookworm AS production
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /usr/share/nginx/html
